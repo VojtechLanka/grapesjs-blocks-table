@@ -1,10 +1,12 @@
 # GrapesJS Blocks Table
 
+Plugin for GrapesJS that adds table block.
+
 ## Options
 
 |Option|Description|Default|
 |-|-|-
-|`containerId`|Container to witch will be binded jQuery Event handlers to control adding new table and handler for adding and removing rows and columns.|`document`|
+|`containerId`|Container to wich will be binded jQuery Event handlers to control adding new table and handler for adding and removing rows and columns.|`document`|
 
 ## Usage
 
@@ -24,6 +26,8 @@
   });
 </script>
 ```
+
+After dragging the table block to editor modal with initial table settings will open. Further manipulation (adding, removing, merging) of rows and columns is done through custom toolbar. You can also double click cell to automatically add text component.
 
 ## License
 
