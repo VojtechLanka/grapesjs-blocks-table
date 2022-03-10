@@ -19,21 +19,50 @@ export default (editor, opts = {}) => {
       model.components().each(mod => getAllComponents(mod, result))
       return result;
     }
-    
+
     function updateAttributesAndCloseModal (componentId) {
       let nRows = document.getElementById('nRows').value;
       let nColumns = document.getElementById('nColumns').value;
-      if (nRows || nColumns) {
-        let tableModel = getAllComponents(editor.getWrapper()).find(model => model.cid == componentId);
-        let modelAttributes = tableModel.getAttributes();
+      let hasHeader = document.getElementById('hasHeader').checked;
+      let isCreated = document.getElementById('isCreated').value;
+      let tableModel = getAllComponents(editor.getWrapper()).find(model => model.cid == componentId);
+      let modelAttributes = tableModel.getAttributes();
+      
+      if(isCreated==='true')
+      {
+        let change = false;
+        if(modelAttributes['data-isCreated'] === 'false')
+        {
+          change = true
+          modelAttributes['data-isCreated'] = isCreated;
+        }
+        if(modelAttributes['data-hasHeader'] !== hasHeader)
+        {
+          change = true
+          modelAttributes['data-hasHeader'] = hasHeader;
+        }
+        if(change)
+        {
+          tableModel.setAttributes(modelAttributes);
+        }
+      } 
+      else if (isCreated == 'false' && nRows || nColumns) {
+
+        tableModel = getAllComponents(editor.getWrapper()).find(model => model.cid == componentId);
+        modelAttributes = tableModel.getAttributes();
         if (nRows) {
           modelAttributes['data-n_rows'] = nRows;
         }
         if (nColumns) {
           modelAttributes['data-n_columns'] = nColumns;
         }
+        if(hasHeader) {
+          modelAttributes['data-hasHeader'] = hasHeader;
+        }
+        modelAttributes['data-isCreated'] = isCreated;
         tableModel.setAttributes(modelAttributes);
       }
+
       editor.Modal.close();
     }
 
@@ -54,11 +83,32 @@ export default (editor, opts = {}) => {
       }
       return toolbar;
     }
+
+    const getTableToolbar = (component) => {
+      const tb = component.get('toolbar');
+      let settingExists = tb.find(o=> o.command === 'open-table-settings-modal');
+      if(!settingExists)
+      {
+        tb.push(
+          {
+              command: 'open-table-settings-modal',
+              attributes: {class: 'fa fa-cog', title: 'Settings'},
+          }
+        );
+        return tb;
+      }
+      return tb;
+    }
   
     editor.on('component:selected', component => {
       if (component.get('type') == 'cell') {
         component.set('toolbar', getCellToolbar()); // set a toolbars
       }
+
+      if(component.get('type') == 'customTable'){
+        component.set('toolbar', getTableToolbar(component));
+      }
+
     });
   
     cmd.add('table-show-columns-operations', editor => {
@@ -78,12 +128,16 @@ export default (editor, opts = {}) => {
       let selected = editor.getSelected();
       if (selected.is('cell')) {
         let rowComponent = selected.parent();
+        let table = selected.parent().parent();
         rowComponent.parent().components().add({
           type: 'row',
           components: [...Array(rowComponent.components().length).keys()].map(i => ({ type: 'cell' }))
         }, {
           at: rowComponent.collection.indexOf(rowComponent)
         });
+        let tableEl = table.getEl();
+        let rowCount = tableEl.getAttribute('data-n_rows');
+        tableEl.setAttribute('data-n_rows', rowCount + 1);
         editor.selectRemove(selected);
         setTimeout(function() { editor.select(selected); }, 50);
       }
@@ -93,12 +147,16 @@ export default (editor, opts = {}) => {
       let selected = editor.getSelected();
       if (selected.is('cell')) {
         let rowComponent = selected.parent();
+        let table = selected.parent().parent();
         rowComponent.parent().components().add({
           type: 'row',
           components: [...Array(rowComponent.components().length).keys()].map(i => ({ type: 'cell' }))
         }, {
           at: rowComponent.collection.indexOf(rowComponent) + 1
         });
+        let tableEl = table.getEl();
+        let rowCount = tableEl.getAttribute('data-n_rows');
+        tableEl.setAttribute('data-n_rows', rowCount + 1);
         editor.selectRemove(selected);
         setTimeout(function() { editor.select(selected); }, 50);
       }
@@ -107,11 +165,22 @@ export default (editor, opts = {}) => {
     cmd.add('table-insert-column-left', editor => {
       let selected = editor.getSelected();
       if (selected.is('cell')) {
+        let table = selected.parent().parent();
         let columnIndex = selected.collection.indexOf(selected);
-        selected.parent().parent().components().forEach(component => {
-          component.components().add({ type: 'cell' }, {at: columnIndex});
+        table.components().forEach(component => {
+          if(index == 0 && tableAttributes["data-hasHeader"])
+          {
+            component.components().add({ type: 'th' }, {at: columnIndex});
+          }
+          else 
+          {
+            component.components().add({ type: 'cell' }, {at: columnIndex});
+          }
         });
         editor.selectRemove(selected);
+        let tableEl = table.getEl();
+        let columnCount = tableEl.getAttribute('data-n_columns');
+        tableEl.setAttribute('data-n_columns', columnCount + 1);
         setTimeout(function() { editor.select(selected); }, 50);
       }
     });
@@ -119,11 +188,24 @@ export default (editor, opts = {}) => {
     cmd.add('table-insert-column-right', editor => {
       let selected = editor.getSelected();
       if (selected.is('cell')) {
+        let table = selected.parent().parent();
+        let tableAttributes = table.getAttributes();
         let columnIndex = selected.collection.indexOf(selected);
-        selected.parent().parent().components().forEach(component => {
-          component.components().add({ type: 'cell' }, {at: columnIndex + 1});
+        table.components().forEach((component, index) => {
+          //if header is on then the top element needs to be a th
+          if(index == 0 && tableAttributes["data-hasHeader"])
+          {
+            component.components().add({ type: 'th' }, {at: columnIndex + 1});
+          }
+          else 
+          {
+            component.components().add({ type: 'cell' }, {at: columnIndex + 1});
+          }
         });
         editor.selectRemove(selected);
+        let tableEl = table.getEl();
+        let columnCount = Number(tableEl.getAttribute('data-n_columns'));
+        tableEl.setAttribute('data-n_columns', columnCount+1);
         setTimeout(function() { editor.select(selected); }, 50);
       }
     });
@@ -134,6 +216,9 @@ export default (editor, opts = {}) => {
         let table = selected.parent().parent();
         editor.selectRemove(selected);
         selected.parent().remove();
+        let tableEl = table.getEl();
+        let rowCount = tableEl.getAttribute('data-n_rows');
+        tableEl.setAttribute('data-n_rows', rowCount - 1);
         if (table.components().length  === 0) {
           table.parent().remove(table);
         }
@@ -150,7 +235,10 @@ export default (editor, opts = {}) => {
         table.components().forEach(component => {
           component.components().at(columnIndex).remove();
         });
-  
+        let tableEl = table.getEl();
+        let columnCount = tableEl.getAttribute('data-n_columns');
+        tableEl.setAttribute('data-n_columns', columnCount - 1);
+        
         if (table.components().every(component => component.components().length === 0)) {
           table.parent().remove(table);
         }
@@ -242,22 +330,39 @@ export default (editor, opts = {}) => {
   
     cmd.add('open-table-settings-modal', {
       run(editor, sender, opts = {}) {
-        let modelAttributes = opts.model.getAttributes()
+        let model;
+        let isEdit;
+        let readonly;
+        if(opts.model){
+          model = opts.model
+          isEdit = false;
+
+        } else {
+          model = sender.getSelected()
+          isEdit = true;
+        }
+        let modelAttributes = model.getAttributes()
+        let headerChecked = modelAttributes['data-hasHeader']? "checked":"";
+        readonly = isEdit? "readonly":"";
         editor.Modal.open({
           title: 'Create new Table',
           content: `
             <div class="new-table-form">
+              <input type="hidden" name="isCreated" id="isCreated" value="` +isEdit +`" />
               <label>Number of columns</label>
-              <input type="number" class="form-control" value="`+ modelAttributes['data-n_columns'] + `" name="nColumns" id="nColumns" min="1">
+              <input type="number" class="form-control" value="`+ modelAttributes['data-n_columns'] + `" `+ readonly + ` name="nColumns" id="nColumns" min="1">
               <br>
               <label>Number of rows</label>
-              <input type="number" class="form-control" value="`+ modelAttributes['data-n_rows'] +`" name="nRows" id="nRows" min="1">
+              <input type="number" class="form-control" value="`+ modelAttributes['data-n_rows'] +`" name="nRows" id="nRows" min="1" `+ readonly + `>
+              <br>
+              <label>Table headers</label>
+              <input type="checkbox" class="form-control" `+ headerChecked +` name="hasHeader" id="hasHeader">
             <div>
-            <input id="table-button-create-new" type="button" class="button nice white" value="Create Table" data-component-id="`+ opts.model.cid +`">
+            <input id="table-button-create-new" type="button" class="button nice white" value="Create Table" data-component-id="`+ model.cid +`">
           `,
         }).onceClose(() => {
-          if (opts.model.changed && !opts.model.changed.attributes) {
-            opts.model.remove();
+          if (model.changed && !model.changed.attributes) {
+            model.remove();
           }
           this.stopCommand()
         });

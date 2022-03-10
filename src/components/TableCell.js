@@ -25,4 +25,27 @@ export default (comps, config) => {
       },
     }
   });
+
+
+  comps.addType('th', {
+    isComponent: el => el.tagName === 'TH',
+    model: {
+      defaults: {
+        tagName: 'th',
+        draggable: false,
+        removable: false,
+        resizable: cellsResizable,
+      }
+    },
+    view: {
+      onRender() {
+        let aThis = this;
+        $(this.$el).dblclick(function() {
+          if ($(this).children().length === 0) {
+            aThis.model.components().add({ type: 'text', content: 'Text' });
+          }
+        });
+      },
+    }
+  });
 };
