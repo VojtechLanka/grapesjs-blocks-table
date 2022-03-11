@@ -46,9 +46,14 @@ export default (comps, { modal, ...config }) => {
         }
         else 
         {
-          console.log("this is a creation")
           if (this.changed.attributes && (this.changed.attributes['data-n_columns'] || this.changed.attributes['data-n_rows'])) 
           {
+            let calcWidth =  Number(this.getAttributes()['data-n_columns'])*46
+            let setWidth = calcWidth < 900? calcWidth:900;
+            let calcHeight = Number(this.getAttributes()['data-n_rows'])*22
+            
+            this.setStyle({width:  setWidth + "px", height: calcHeight + "px"})
+
             let header = this.getAttributes()['data-hasHeader'];
             let cells = [];
             let headers = [];

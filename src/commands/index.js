@@ -101,14 +101,13 @@ export default (editor, opts = {}) => {
     }
   
     editor.on('component:selected', component => {
-      if (component.get('type') == 'cell') {
+      if (component.get('type') == 'cell' || component.get('type') == 'th') {
         component.set('toolbar', getCellToolbar()); // set a toolbars
       }
 
       if(component.get('type') == 'customTable'){
         component.set('toolbar', getTableToolbar(component));
       }
-
     });
   
     cmd.add('table-show-columns-operations', editor => {
@@ -145,7 +144,7 @@ export default (editor, opts = {}) => {
   
     cmd.add('table-insert-row-below', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell')) {
+      if (selected.is('cell') || selected.is('th')) {
         let rowComponent = selected.parent();
         let table = selected.parent().parent();
         rowComponent.parent().components().add({
@@ -164,10 +163,11 @@ export default (editor, opts = {}) => {
   
     cmd.add('table-insert-column-left', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell')) {
+      if (selected.is('cell') || selected.is('th')) {
         let table = selected.parent().parent();
+        let tableAttributes = table.getAttributes();
         let columnIndex = selected.collection.indexOf(selected);
-        table.components().forEach(component => {
+        table.components().forEach((component, index) => {
           if(index == 0 && tableAttributes["data-hasHeader"])
           {
             component.components().add({ type: 'th' }, {at: columnIndex});
@@ -187,12 +187,11 @@ export default (editor, opts = {}) => {
   
     cmd.add('table-insert-column-right', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell')) {
+      if (selected.is('cell') || selected.is('th')) {
         let table = selected.parent().parent();
         let tableAttributes = table.getAttributes();
         let columnIndex = selected.collection.indexOf(selected);
         table.components().forEach((component, index) => {
-          //if header is on then the top element needs to be a th
           if(index == 0 && tableAttributes["data-hasHeader"])
           {
             component.components().add({ type: 'th' }, {at: columnIndex + 1});
@@ -212,7 +211,7 @@ export default (editor, opts = {}) => {
   
     cmd.add('table-delete-row', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell')) {
+      if (selected.is('cell' || selected.is('th'))) {
         let table = selected.parent().parent();
         editor.selectRemove(selected);
         selected.parent().remove();
@@ -227,7 +226,7 @@ export default (editor, opts = {}) => {
   
     cmd.add('table-delete-column', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell')) {
+      if (selected.is('cell') || selected.is('th')) {
         let table = selected.parent().parent();
         let columnIndex = selected.collection.indexOf(selected);
   
@@ -247,7 +246,7 @@ export default (editor, opts = {}) => {
   
     cmd.add('table-merge-cells-right', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell')) {
+      if (selected.is('cell') || selected.is('th')) {
         let currentColspan = selected.getAttributes()['colspan'] ? selected.getAttributes()['colspan'] : 1;
         let columnIndex = selected.collection.indexOf(selected);
         let rowIndex = selected.parent().collection.indexOf(selected.parent());
@@ -299,7 +298,7 @@ export default (editor, opts = {}) => {
   
     cmd.add('table-unmerge-cells', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell')) {
+      if (selected.is('cell') || selected.is('th')) {
         let currentColspan = selected.getAttributes()['colspan'] ? selected.getAttributes()['colspan'] : 1;
         let currentRowspan = selected.getAttributes()['rowspan'] ? selected.getAttributes()['rowspan'] : 1;
         let columnIndex = selected.collection.indexOf(selected);
@@ -336,16 +335,16 @@ export default (editor, opts = {}) => {
         if(opts.model){
           model = opts.model
           isEdit = false;
-
         } else {
           model = sender.getSelected()
           isEdit = true;
         }
         let modelAttributes = model.getAttributes()
         let headerChecked = modelAttributes['data-hasHeader']? "checked":"";
-        readonly = isEdit? "readonly":"";
+        readonly = isEdit? "disabled":"";
+        let buttonText = isEdit? "Edit Table" : "Create Table";
         editor.Modal.open({
-          title: 'Create new Table',
+          title: buttonText,
           content: `
             <div class="new-table-form">
               <input type="hidden" name="isCreated" id="isCreated" value="` +isEdit +`" />
@@ -358,11 +357,13 @@ export default (editor, opts = {}) => {
               <label>Table headers</label>
               <input type="checkbox" class="form-control" `+ headerChecked +` name="hasHeader" id="hasHeader">
             <div>
-            <input id="table-button-create-new" type="button" class="button nice white" value="Create Table" data-component-id="`+ model.cid +`">
+            <input id="table-button-create-new" type="button" class="gjs-btn-prim button nice white" value="`+ buttonText + `" data-component-id="`+ model.cid +`">
           `,
         }).onceClose(() => {
-          if (model.changed && !model.changed.attributes) {
-            model.remove();
+          if(!isEdit){
+            if (model.changed && !model.changed.attributes) {
+              model.remove();
+            }
           }
           this.stopCommand()
         });
@@ -381,7 +382,7 @@ export default (editor, opts = {}) => {
         $('.toolbar-submenu').slideUp('slow');
         $('ul#toolbar-submenu-'+submenuToShow).slideDown('slow');
       } else {
-        if (selected && selected.is('cell')) {
+        if (selected && selected.is('cell') || selected.is('th')) {
           let rowComponent = selected.parent();
           if ($('.' + submenuToHide + '-operations .toolbar-submenu').length > 0){
             $('.' + submenuToHide + '-operations .toolbar-submenu').slideUp('slow');
@@ -397,7 +398,7 @@ export default (editor, opts = {}) => {
             if (submenuToShow === 'rows') {
               htmlString = `
               <ul id="toolbar-submenu-rows" class="toolbar-submenu ` + ($('.gjs-toolbar').position().left > 150 ? 'toolbar-submenu-right' : '') + `" style="display: none;">
-                <li class="table-toolbar-submenu-run-command" data-command="table-insert-row-above"><i class="fa fa-chevron-up" aria-hidden="true"></i> Insert row above</li>
+                <li class="table-toolbar-submenu-run-command" data-command="table-insert-row-above" ` + (selected.is('th') ? 'style="display: none;"' : '') + `><i class="fa fa-chevron-up" aria-hidden="true"></i> Insert row above</li>
                 <li class="table-toolbar-submenu-run-command" data-command="table-insert-row-below" ><i class="fa fa-chevron-down" aria-hidden="true"></i> Insert row below</li>
                 <li class="table-toolbar-submenu-run-command" data-command="table-delete-row" ><i class="fa fa-trash" aria-hidden="true"></i> Delete Row</li>
                 <li id="button-merge-cells-right" class="table-toolbar-submenu-run-command" data-command="table-merge-cells-right" ` + (selected.collection.indexOf(selected) + 1 == selected.parent().components().length ? 'style="display: none;"' : '') + `><i class="fa fa-arrows-h" aria-hidden="true"></i> Merge cell right</li>
@@ -411,7 +412,7 @@ export default (editor, opts = {}) => {
                 <li class="table-toolbar-submenu-run-command" data-command="table-insert-column-left" ><i class="fa fa-chevron-left" aria-hidden="true"></i> Insert column left</li>
                 <li class="table-toolbar-submenu-run-command" data-command="table-insert-column-right" ><i class="fa fa-chevron-right" aria-hidden="true"></i> Insert column right</li>
                 <li class="table-toolbar-submenu-run-command" data-command="table-delete-column" ><i class="fa fa-trash" aria-hidden="true"></i> Delete column</li>
-                <li id="button-merge-cells-down" class="table-toolbar-submenu-run-command" data-command="table-merge-cells-down" ` + (rowComponent.collection.indexOf(rowComponent) + rowspan == rowComponent.parent().components().length ? 'style="display: none;"' : '') + `><i class="fa fa-arrows-v" aria-hidden="true"></i> Merge cell down</li>
+                <li id="button-merge-cells-down" class="table-toolbar-submenu-run-command" data-command="table-merge-cells-down" ` + (rowComponent.collection.indexOf(rowComponent) + rowspan == rowComponent.parent().components().length || selected.is('th') ? 'style="display: none;"' : '') + `><i class="fa fa-arrows-v" aria-hidden="true"></i> Merge cell down</li>
               </ul>
               `;
             }
