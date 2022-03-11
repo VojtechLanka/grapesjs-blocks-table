@@ -30,7 +30,12 @@ export default (editor, opts = {}) => {
             height: 23px;
             width: 23px;
             margin: 2px 3px;
-        }`;
+        }
+        .new-table-form label{width: 160px;float: left;}
+        .new-table-form .form-control{padding: 3px 5px;margin-bottom: 10px;}
+        #table-button-create-new{margin-top:10px }
+
+        `;
     
         let head = document.head || document.getElementsByTagName('head')[0]
         let style = document.createElement('style');
