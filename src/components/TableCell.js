@@ -35,6 +35,7 @@ export default (comps, config) => {
         draggable: false,
         removable: false,
         resizable: cellsResizable,
+        classes: ['gjs-cell'],
       }
     },
     view: {

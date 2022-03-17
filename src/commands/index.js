@@ -28,25 +28,20 @@ export default (editor, opts = {}) => {
       let tableModel = getAllComponents(editor.getWrapper()).find(model => model.cid == componentId);
       let modelAttributes = tableModel.getAttributes();
       
-      if(isCreated==='true')
-      {
+      if(isCreated==='true') {
         let change = false;
-        if(modelAttributes['data-isCreated'] === 'false')
-        {
+        if(modelAttributes['data-isCreated'] === 'false') {
           change = true
           modelAttributes['data-isCreated'] = isCreated;
         }
-        if(modelAttributes['data-hasHeader'] !== hasHeader)
-        {
+        if(modelAttributes['data-hasHeader'] !== hasHeader) {
           change = true
           modelAttributes['data-hasHeader'] = hasHeader;
         }
-        if(change)
-        {
+        if(change) {
           tableModel.setAttributes(modelAttributes);
         }
-      } 
-      else if (isCreated == 'false' && nRows || nColumns) {
+      } else if (isCreated == 'false' && nRows || nColumns) {
 
         tableModel = getAllComponents(editor.getWrapper()).find(model => model.cid == componentId);
         modelAttributes = tableModel.getAttributes();
@@ -87,8 +82,7 @@ export default (editor, opts = {}) => {
     const getTableToolbar = (component) => {
       const tb = component.get('toolbar');
       let settingExists = tb.find(o=> o.command === 'open-table-settings-modal');
-      if(!settingExists)
-      {
+      if(!settingExists) {
         tb.push(
           {
               command: 'open-table-settings-modal',
@@ -110,11 +104,11 @@ export default (editor, opts = {}) => {
       }
     });
   
-    cmd.add('table-show-columns-operations', editor => {
+    cmd.add('table-show-columns-operations', () => {
       updateTableToolbarSubmenu('columns', 'rows');
     });
   
-    cmd.add('table-show-rows-operations', editor => {
+    cmd.add('table-show-rows-operations', () => {
       updateTableToolbarSubmenu('rows', 'columns');
     });
   
@@ -130,7 +124,7 @@ export default (editor, opts = {}) => {
         let table = selected.parent().parent();
         rowComponent.parent().components().add({
           type: 'row',
-          components: [...Array(rowComponent.components().length).keys()].map(i => ({ type: 'cell' }))
+          components: [...Array(rowComponent.components().length).keys()].map(() => ({ type: 'cell' }))
         }, {
           at: rowComponent.collection.indexOf(rowComponent)
         });
@@ -138,7 +132,9 @@ export default (editor, opts = {}) => {
         let rowCount = tableEl.getAttribute('data-n_rows');
         tableEl.setAttribute('data-n_rows', rowCount + 1);
         editor.selectRemove(selected);
-        setTimeout(function() { editor.select(selected); }, 50);
+        setTimeout(function() {
+ editor.select(selected); 
+}, 50);
       }
     });
   
@@ -149,7 +145,7 @@ export default (editor, opts = {}) => {
         let table = selected.parent().parent();
         rowComponent.parent().components().add({
           type: 'row',
-          components: [...Array(rowComponent.components().length).keys()].map(i => ({ type: 'cell' }))
+          components: [...Array(rowComponent.components().length).keys()].map(() => ({ type: 'cell' }))
         }, {
           at: rowComponent.collection.indexOf(rowComponent) + 1
         });
@@ -157,7 +153,9 @@ export default (editor, opts = {}) => {
         let rowCount = tableEl.getAttribute('data-n_rows');
         tableEl.setAttribute('data-n_rows', rowCount + 1);
         editor.selectRemove(selected);
-        setTimeout(function() { editor.select(selected); }, 50);
+        setTimeout(function() {
+ editor.select(selected); 
+}, 50);
       }
     });
   
@@ -168,12 +166,9 @@ export default (editor, opts = {}) => {
         let tableAttributes = table.getAttributes();
         let columnIndex = selected.collection.indexOf(selected);
         table.components().forEach((component, index) => {
-          if(index == 0 && tableAttributes["data-hasHeader"])
-          {
+          if(index == 0 && tableAttributes["data-hasHeader"]) {
             component.components().add({ type: 'th' }, {at: columnIndex});
-          }
-          else 
-          {
+          } else {
             component.components().add({ type: 'cell' }, {at: columnIndex});
           }
         });
@@ -181,7 +176,9 @@ export default (editor, opts = {}) => {
         let tableEl = table.getEl();
         let columnCount = tableEl.getAttribute('data-n_columns');
         tableEl.setAttribute('data-n_columns', columnCount + 1);
-        setTimeout(function() { editor.select(selected); }, 50);
+        setTimeout(function() {
+ editor.select(selected); 
+}, 50);
       }
     });
   
@@ -192,12 +189,9 @@ export default (editor, opts = {}) => {
         let tableAttributes = table.getAttributes();
         let columnIndex = selected.collection.indexOf(selected);
         table.components().forEach((component, index) => {
-          if(index == 0 && tableAttributes["data-hasHeader"])
-          {
+          if(index == 0 && tableAttributes["data-hasHeader"]) {
             component.components().add({ type: 'th' }, {at: columnIndex + 1});
-          }
-          else 
-          {
+          } else {
             component.components().add({ type: 'cell' }, {at: columnIndex + 1});
           }
         });
@@ -205,7 +199,9 @@ export default (editor, opts = {}) => {
         let tableEl = table.getEl();
         let columnCount = Number(tableEl.getAttribute('data-n_columns'));
         tableEl.setAttribute('data-n_columns', columnCount+1);
-        setTimeout(function() { editor.select(selected); }, 50);
+        setTimeout(function() {
+ editor.select(selected); 
+}, 50);
       }
     });
   
@@ -263,7 +259,9 @@ export default (editor, opts = {}) => {
   
         selected.addAttributes({ 'colspan': ++currentColspan });
         editor.selectRemove(selected);
-        setTimeout(function() { editor.select(selected); }, 50);
+        setTimeout(function() {
+ editor.select(selected); 
+}, 50);
         if (columnIndex + 1 == selected.parent().components().length) {
           $('#button-merge-cells-right').hide();
         }
@@ -289,7 +287,9 @@ export default (editor, opts = {}) => {
   
         selected.addAttributes({ 'rowspan': ++currentRowspan });
         editor.selectRemove(selected);
-        setTimeout(function() { editor.select(selected); }, 50);
+        setTimeout(function() {
+ editor.select(selected); 
+}, 50);
         if (rowIndex + 2 == table.components().length) {
           $('#button-merge-cells-down').hide();
         }
@@ -321,7 +321,9 @@ export default (editor, opts = {}) => {
         selected.setAttributes({ 'rowspan': 1 });
   
         editor.selectRemove(selected);
-        setTimeout(function() { editor.select(selected); }, 50);
+        setTimeout(function() {
+ editor.select(selected); 
+}, 50);
         $('#button-merge-cells-down').show();
         $('#button-merge-cells-right').show();
       }

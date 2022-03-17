@@ -14,40 +14,17 @@ export default (comps, { modal, ...config }) => {
           'data-n_rows': 3,
           'data-hasHeader': false,
         },
-        // toolbar: [
-        
-        //   {
-        //     attributes: {class: 'fa fa-cog', title: 'Settings'},
-        //     command: 'open-table-settings-modal',
-        //   }
-        // ],
-        
-        //classes: ['custom-table-component'],
       },
-      
-      // initToolbar() {
-        
-      //   typeOpt.prototype.initToolbar.apply(this, arguments);
-      //   const tb = this.get('toolbar');
-      //   tb.push({
-      //     command: 'open-table-settings-modal',
-      //     attributes: {class: 'fa fa-cog', title: 'Settings'},
-      //   });
-      //   this.set('toolbar', tb);
-      // },
+
       init() {
         this.listenTo(this, 'change:attributes', this.updateModelComponents);
       },
       updateModelComponents () {
         //need to be able to tell if component has already been initiated or not.
-        if(this.getAttributes()['data-isCreated'] === 'true')
-        {
+        if(this.getAttributes()['data-isCreated'] === 'true') {
           this.processUpdate()
-        }
-        else 
-        {
-          if (this.changed.attributes && (this.changed.attributes['data-n_columns'] || this.changed.attributes['data-n_rows'])) 
-          {
+        } else {
+          if (this.changed.attributes && (this.changed.attributes['data-n_columns'] || this.changed.attributes['data-n_rows'])) {
             let calcWidth =  Number(this.getAttributes()['data-n_columns'])*46
             let setWidth = calcWidth < 900? calcWidth:900;
             let calcHeight = Number(this.getAttributes()['data-n_rows'])*22
@@ -63,8 +40,7 @@ export default (comps, { modal, ...config }) => {
             for (let index = 0; index < this.getAttributes()['data-n_rows']; index++) {
               this.components().add({ type: 'row', components: cells }, { at: -1 });
             }
-            if(header)
-            {
+            if(header) {
               for (let index = 0; index < this.getAttributes()['data-n_columns']; index++) {
                 headers.push({ type: 'th' });
               }
@@ -74,24 +50,15 @@ export default (comps, { modal, ...config }) => {
         }
       },
       processUpdate(){
-          console.log(this.getAttributes()['data-isCreated'])
-          console.log("this is an edit, these attributes changes: ")
-          console.log(this.changed.attributes)
-          console.log("hasHeader: "+ this.checkHeaderExists())
-          if (this.changed.attributes)
-          {
-            if(this.checkHeaderExists() != this.changed.attributes['data-hasHeader'])
-            {
-              if(this.changed.attributes['data-hasHeader'])
-              {
+          if (this.changed.attributes) {
+            if(this.checkHeaderExists() != this.changed.attributes['data-hasHeader']) {
+              if(this.changed.attributes['data-hasHeader']) {
                 let headers = [];
                 for (let index = 0; index < this.getAttributes()['data-n_columns']; index++) {
                   headers.push({ type: 'th' });
                 }
                 this.components().add({ type: 'row', components: headers }, { at: 0 });
-              } 
-              else 
-              {
+              } else {
                 this.components().at(0).remove()
               }
             }

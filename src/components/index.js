@@ -1,4 +1,4 @@
-import CustomTable from "./customTable";
+import CustomTable from "./CustomTable";
 import TableCell from "./TableCell";
 
 export default (editor, config = {}) => {
