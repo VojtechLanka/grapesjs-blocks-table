@@ -10,8 +10,8 @@ export default (comps, { modal, ...config }) => {
         droppable: true,
         resizable: tblResizable,
         attributes: {
-          'data-n_columns': 5,
-          'data-n_rows': 3,
+          'data-nColumns': 5,
+          'data-nRows': 3,
           'data-hasHeader': false,
         },
       },
@@ -24,24 +24,24 @@ export default (comps, { modal, ...config }) => {
         if(this.getAttributes()['data-isCreated'] === 'true') {
           this.processUpdate()
         } else {
-          if (this.changed.attributes && (this.changed.attributes['data-n_columns'] || this.changed.attributes['data-n_rows'])) {
-            let calcWidth =  Number(this.getAttributes()['data-n_columns'])*46
+          if (this.changed.attributes && (this.changed.attributes['data-nColumns'] || this.changed.attributes['data-nRows'])) {
+            let calcWidth =  Number(this.getAttributes()['data-nColumns'])*46
             let setWidth = calcWidth < 900? calcWidth:900;
-            let calcHeight = Number(this.getAttributes()['data-n_rows'])*22
+            let calcHeight = Number(this.getAttributes()['data-nRows'])*22
             
             this.setStyle({width:  setWidth + "px", height: calcHeight + "px"})
 
             let header = this.getAttributes()['data-hasHeader'];
             let cells = [];
             let headers = [];
-            for (let index = 0; index < this.getAttributes()['data-n_columns']; index++) {
+            for (let index = 0; index < this.getAttributes()['data-nColumns']; index++) {
               cells.push({ type: 'cell' });
             }
-            for (let index = 0; index < this.getAttributes()['data-n_rows']; index++) {
+            for (let index = 0; index < this.getAttributes()['data-nRows']; index++) {
               this.components().add({ type: 'row', components: cells }, { at: -1 });
             }
             if(header) {
-              for (let index = 0; index < this.getAttributes()['data-n_columns']; index++) {
+              for (let index = 0; index < this.getAttributes()['data-nColumns']; index++) {
                 headers.push({ type: 'th' });
               }
               this.components().add({ type: 'row', components: headers }, { at: 0 });
@@ -54,7 +54,7 @@ export default (comps, { modal, ...config }) => {
             if(this.checkHeaderExists() != this.changed.attributes['data-hasHeader']) {
               if(this.changed.attributes['data-hasHeader']) {
                 let headers = [];
-                for (let index = 0; index < this.getAttributes()['data-n_columns']; index++) {
+                for (let index = 0; index < this.getAttributes()['data-nColumns']; index++) {
                   headers.push({ type: 'th' });
                 }
                 this.components().add({ type: 'row', components: headers }, { at: 0 });

@@ -46,10 +46,10 @@ export default (editor, opts = {}) => {
         tableModel = getAllComponents(editor.getWrapper()).find(model => model.cid == componentId);
         modelAttributes = tableModel.getAttributes();
         if (nRows) {
-          modelAttributes['data-n_rows'] = nRows;
+          modelAttributes['data-nRows'] = nRows;
         }
         if (nColumns) {
-          modelAttributes['data-n_columns'] = nColumns;
+          modelAttributes['data-nColumns'] = nColumns;
         }
         if(hasHeader) {
           modelAttributes['data-hasHeader'] = hasHeader;
@@ -89,7 +89,6 @@ export default (editor, opts = {}) => {
               attributes: {class: 'fa fa-cog', title: 'Settings'},
           }
         );
-        return tb;
       }
       return tb;
     }
@@ -129,8 +128,8 @@ export default (editor, opts = {}) => {
           at: rowComponent.collection.indexOf(rowComponent)
         });
         let tableEl = table.getEl();
-        let rowCount = tableEl.getAttribute('data-n_rows');
-        tableEl.setAttribute('data-n_rows', rowCount + 1);
+        let rowCount = tableEl.getAttribute('data-nRows');
+        tableEl.setAttribute('data-nRows', rowCount + 1);
         editor.selectRemove(selected);
         setTimeout(function() {
  editor.select(selected); 
@@ -150,8 +149,8 @@ export default (editor, opts = {}) => {
           at: rowComponent.collection.indexOf(rowComponent) + 1
         });
         let tableEl = table.getEl();
-        let rowCount = tableEl.getAttribute('data-n_rows');
-        tableEl.setAttribute('data-n_rows', rowCount + 1);
+        let rowCount = tableEl.getAttribute('data-nRows');
+        tableEl.setAttribute('data-nRows', rowCount + 1);
         editor.selectRemove(selected);
         setTimeout(function() {
  editor.select(selected); 
@@ -174,8 +173,8 @@ export default (editor, opts = {}) => {
         });
         editor.selectRemove(selected);
         let tableEl = table.getEl();
-        let columnCount = tableEl.getAttribute('data-n_columns');
-        tableEl.setAttribute('data-n_columns', columnCount + 1);
+        let columnCount = tableEl.getAttribute('data-nColumns');
+        tableEl.setAttribute('data-nColumns', columnCount + 1);
         setTimeout(function() {
  editor.select(selected); 
 }, 50);
@@ -197,8 +196,8 @@ export default (editor, opts = {}) => {
         });
         editor.selectRemove(selected);
         let tableEl = table.getEl();
-        let columnCount = Number(tableEl.getAttribute('data-n_columns'));
-        tableEl.setAttribute('data-n_columns', columnCount+1);
+        let columnCount = Number(tableEl.getAttribute('data-nColumns'));
+        tableEl.setAttribute('data-nColumns', columnCount+1);
         setTimeout(function() {
  editor.select(selected); 
 }, 50);
@@ -212,8 +211,8 @@ export default (editor, opts = {}) => {
         editor.selectRemove(selected);
         selected.parent().remove();
         let tableEl = table.getEl();
-        let rowCount = tableEl.getAttribute('data-n_rows');
-        tableEl.setAttribute('data-n_rows', rowCount - 1);
+        let rowCount = tableEl.getAttribute('data-nRows');
+        tableEl.setAttribute('data-nRows', rowCount - 1);
         if (table.components().length  === 0) {
           table.parent().remove(table);
         }
@@ -231,8 +230,8 @@ export default (editor, opts = {}) => {
           component.components().at(columnIndex).remove();
         });
         let tableEl = table.getEl();
-        let columnCount = tableEl.getAttribute('data-n_columns');
-        tableEl.setAttribute('data-n_columns', columnCount - 1);
+        let columnCount = tableEl.getAttribute('data-nColumns');
+        tableEl.setAttribute('data-nColumns', columnCount - 1);
         
         if (table.components().every(component => component.components().length === 0)) {
           table.parent().remove(table);
@@ -351,10 +350,10 @@ export default (editor, opts = {}) => {
             <div class="new-table-form">
               <input type="hidden" name="isCreated" id="isCreated" value="` +isEdit +`" />
               <label>Number of columns</label>
-              <input type="number" class="form-control" value="`+ modelAttributes['data-n_columns'] + `" `+ readonly + ` name="nColumns" id="nColumns" min="1">
+              <input type="number" class="form-control" value="`+ modelAttributes['data-nColumns'] + `" `+ readonly + ` name="nColumns" id="nColumns" min="1">
               <br>
               <label>Number of rows</label>
-              <input type="number" class="form-control" value="`+ modelAttributes['data-n_rows'] +`" name="nRows" id="nRows" min="1" `+ readonly + `>
+              <input type="number" class="form-control" value="`+ modelAttributes['data-nRows'] +`" name="nRows" id="nRows" min="1" `+ readonly + `>
               <br>
               <label>Table headers</label>
               <input type="checkbox" class="form-control" `+ headerChecked +` name="hasHeader" id="hasHeader">
