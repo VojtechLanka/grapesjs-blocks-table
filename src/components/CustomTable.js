@@ -53,7 +53,7 @@ export default (comps, { modal, ...config }) => {
         let calcWidth =  Number(this.props().nColumns)*46
         let setWidth = calcWidth < 900? calcWidth:900;
         let calcHeight = Number(this.props().nRows)*22
-        
+
         this.setStyle({width:  setWidth + "px", height: calcHeight + "px"})
 
         let cells = [];
@@ -74,8 +74,8 @@ export default (comps, { modal, ...config }) => {
       },
       columnsChanged(selected, value, opts) {
         if(this.columnCount() === value)
-          return  
-        
+          return
+
         const baseDifference = value - this.columnCount();
         const difference = Math.abs(value - this.columnCount())
         if(baseDifference<0){
@@ -105,16 +105,10 @@ export default (comps, { modal, ...config }) => {
         }
       },
       headerChanged(selected, value, opts) {
+        console.log("header Exists: ",this.checkHeaderExists())
+        console.log("current setting: ", this.props().hasHeaders)
         if(this.checkHeaderExists() != this.props().hasHeaders) {
-          if(this.props().hasHeaders) {
-            let headers = [];
-            for (let index = 0; index < this.props().nColumns; index++) {
-              headers.push({ type: 'th' });
-            }
-            this.components().add({ type: 'row', components: headers }, { at: 0 });
-          } else {
-            this.components().at(0).remove()
-          }
+          tblHelper.toggleHeaderRow(this)
         }
       },
       checkHeaderExists(){

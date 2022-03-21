@@ -60,6 +60,14 @@ export default (editor, opts = {}) => {
       updateTableToolbarSubmenu('rows', 'columns');
     });
 
+    cmd.add('table-toggle-header', ()=> {
+      let selected = editor.getSelected();
+      if (selected.is('th')) {
+        let table = selected.parent().parent();
+        tblHelper.toggleHeaderRow(table, true)
+      }
+    });
+
     cmd.add('table-select', editor => {
       editor.runCommand('core:component-exit');
       editor.runCommand('core:component-exit');
@@ -275,7 +283,8 @@ export default (editor, opts = {}) => {
               <ul id="toolbar-submenu-rows" class="toolbar-submenu ` + ($('.gjs-toolbar').position().left > 150 ? 'toolbar-submenu-right' : '') + `" style="display: none;">
                 <li class="table-toolbar-submenu-run-command" data-command="table-insert-row-above" ` + (selected.is('th') ? 'style="display: none;"' : '') + `><i class="fa fa-chevron-up" aria-hidden="true"></i> Insert row above</li>
                 <li class="table-toolbar-submenu-run-command" data-command="table-insert-row-below" ><i class="fa fa-chevron-down" aria-hidden="true"></i> Insert row below</li>
-                <li class="table-toolbar-submenu-run-command" data-command="table-delete-row" ><i class="fa fa-trash" aria-hidden="true"></i> Delete Row</li>
+                <li class="table-toolbar-submenu-run-command" data-command="table-delete-row" `+ (selected.is('th') ? 'style="display: none;"' : '') +` ><i class="fa fa-trash" aria-hidden="true"></i> Delete Row</li>
+                <li class="table-toolbar-submenu-run-command" data-command="table-toggle-header" `+ (selected.is('cell') ? 'style="display: none;"' : '') +`><i class="fa fa-trash" aria-hidden="true"></i> Remove Header</li>
                 <li id="button-merge-cells-right" class="table-toolbar-submenu-run-command" data-command="table-merge-cells-right" ` + (selected.collection.indexOf(selected) + 1 == selected.parent().components().length ? 'style="display: none;"' : '') + `><i class="fa fa-arrows-h" aria-hidden="true"></i> Merge cell right</li>
               </ul>
               `;
