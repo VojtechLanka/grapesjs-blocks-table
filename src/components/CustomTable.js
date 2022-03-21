@@ -124,7 +124,10 @@ export default (comps, { modal, ...config }) => {
         return this.components().length > 0
       },
       rowCount(){
-        return this.components().length
+        let rowCount = this.components().length
+        if(this.components().at(0).components().at(0).is('th'))
+          rowCount--
+        return rowCount
       },
       columnCount(){
         return this.components().at(0).components().length
