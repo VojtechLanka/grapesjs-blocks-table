@@ -105,8 +105,6 @@ export default (comps, { modal, ...config }) => {
         }
       },
       headerChanged(selected, value, opts) {
-        console.log("header Exists: ",this.checkHeaderExists())
-        console.log("current setting: ", this.props().hasHeaders)
         if(this.checkHeaderExists() != this.props().hasHeaders) {
           tblHelper.toggleHeaderRow(this)
         }
