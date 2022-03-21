@@ -8,58 +8,7 @@ export default (editor, opts = {}) => {
       $(opts.containerId ? opts.containerId : document).on('click','li.table-toolbar-submenu-run-command', function() {
         editor.runCommand(this.dataset.command);
       });
-
-      $(opts.containerId ? opts.containerId : document).on('click','input#table-button-create-new', function() {
-        updateAttributesAndCloseModal(this.dataset.componentId)
-      });
     })
-
-    function getAllComponents (model, result = []) {
-      result.push(model);
-      model.components().each(mod => getAllComponents(mod, result))
-      return result;
-    }
-
-    function updateAttributesAndCloseModal (componentId) {
-      let nRows = document.getElementById('nRows').value;
-      let nColumns = document.getElementById('nColumns').value;
-      let hasHeader = document.getElementById('hasHeader').checked;
-      let isCreated = document.getElementById('isCreated').value;
-      let tableModel = getAllComponents(editor.getWrapper()).find(model => model.cid == componentId);
-      let modelAttributes = tableModel.getAttributes();
-
-      if(isCreated==='true') {
-        let change = false;
-        if(modelAttributes['data-isCreated'] === 'false') {
-          change = true
-          modelAttributes['data-isCreated'] = isCreated;
-        }
-        if(modelAttributes['data-hasHeader'] !== hasHeader) {
-          change = true
-          modelAttributes['data-hasHeader'] = hasHeader;
-        }
-        if(change) {
-          tableModel.setAttributes(modelAttributes);
-        }
-      } else if (isCreated == 'false' && nRows || nColumns) {
-
-        tableModel = getAllComponents(editor.getWrapper()).find(model => model.cid == componentId);
-        modelAttributes = tableModel.getAttributes();
-        if (nRows) {
-          modelAttributes['data-nRows'] = nRows;
-        }
-        if (nColumns) {
-          modelAttributes['data-nColumns'] = nColumns;
-        }
-        if(hasHeader) {
-          modelAttributes['data-hasHeader'] = hasHeader;
-        }
-        modelAttributes['data-isCreated'] = isCreated;
-        tableModel.setAttributes(modelAttributes);
-      }
-
-      editor.Modal.close();
-    }
 
     editor.on('component:add', (model) => {
       if (model.attributes.type === 'customTable' && model.components().length == 0) {
@@ -199,7 +148,6 @@ export default (editor, opts = {}) => {
 
         editor.selectRemove(selected);
         tblHelper.removeColumn(table, columnIndex, true)
-
 
         if (table.components().every(component => component.components().length === 0)) {
           table.parent().remove(table);
