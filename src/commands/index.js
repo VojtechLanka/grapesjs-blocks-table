@@ -3,7 +3,8 @@ import * as tblHelper from "../tableHelper"
 
 export default (editor, opts = {}) => {
     const cmd = editor.Commands;
-
+    const cellType = "tbl-cell"
+    
     $(function() {
       $(opts.containerId ? opts.containerId : document).on('click','li.table-toolbar-submenu-run-command', function() {
         editor.runCommand(this.dataset.command);
@@ -43,7 +44,7 @@ export default (editor, opts = {}) => {
     }
 
     editor.on('component:selected', component => {
-      if (component.get('type') == 'cell' || component.get('type') == 'th') {
+      if (component.get('type') == cellType || component.get('type') == 'th') {
         component.set('toolbar', getCellToolbar()); // set a toolbars
       }
 
@@ -75,7 +76,7 @@ export default (editor, opts = {}) => {
 
     cmd.add('table-insert-row-above', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell')) {
+      if (selected.is(cellType)) {
         let rowComponent = selected.parent();
         let table = selected.parent().parent();
         tblHelper.insertRow(table, rowComponent.collection.indexOf(rowComponent), true)
@@ -89,7 +90,7 @@ export default (editor, opts = {}) => {
 
     cmd.add('table-insert-row-below', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell') || selected.is('th')) {
+      if (selected.is(cellType) || selected.is('th')) {
         let rowComponent = selected.parent();
         let table = selected.parent().parent();
         tblHelper.insertRow(table, rowComponent.collection.indexOf(rowComponent) + 1, true)
@@ -103,7 +104,7 @@ export default (editor, opts = {}) => {
 
     cmd.add('table-insert-column-left', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell') || selected.is('th')) {
+      if (selected.is(cellType) || selected.is('th')) {
         let table = selected.parent().parent();
         let columnIndex = selected.collection.indexOf(selected);
         tblHelper.insertColumn(table, columnIndex, true)
@@ -117,7 +118,7 @@ export default (editor, opts = {}) => {
 
     cmd.add('table-insert-column-right', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell') || selected.is('th')) {
+      if (selected.is(cellType) || selected.is('th')) {
         let table = selected.parent().parent();
 
         let columnIndex = selected.collection.indexOf(selected);
@@ -134,7 +135,7 @@ export default (editor, opts = {}) => {
 
     cmd.add('table-delete-row', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell' || selected.is('th'))) {
+      if (selected.is(cellType) || selected.is('th')) {
         let table = selected.parent().parent();
         editor.selectRemove(selected);
         let rowComponent = selected.parent();
@@ -150,7 +151,7 @@ export default (editor, opts = {}) => {
 
     cmd.add('table-delete-column', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell') || selected.is('th')) {
+      if (selected.is(cellType) || selected.is('th')) {
         let table = selected.parent().parent();
         let columnIndex = selected.collection.indexOf(selected);
 
@@ -165,7 +166,7 @@ export default (editor, opts = {}) => {
 
     cmd.add('table-merge-cells-right', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell') || selected.is('th')) {
+      if (selected.is(cellType) || selected.is('th')) {
         let currentColspan = selected.getAttributes()['colspan'] ? selected.getAttributes()['colspan'] : 1;
         let columnIndex = selected.collection.indexOf(selected);
         let rowIndex = selected.parent().collection.indexOf(selected.parent());
@@ -193,7 +194,7 @@ export default (editor, opts = {}) => {
 
     cmd.add('table-merge-cells-down', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell')) {
+      if (selected.is(cellType)) {
         let currentColspan = selected.getAttributes()['colspan'] ? selected.getAttributes()['colspan'] : 1;
         let currentRowspan = selected.getAttributes()['rowspan'] ? selected.getAttributes()['rowspan'] : 1;
         let columnIndex = selected.collection.indexOf(selected);
@@ -221,7 +222,7 @@ export default (editor, opts = {}) => {
 
     cmd.add('table-unmerge-cells', editor => {
       let selected = editor.getSelected();
-      if (selected.is('cell') || selected.is('th')) {
+      if (selected.is(cellType) || selected.is('th')) {
         let currentColspan = selected.getAttributes()['colspan'] ? selected.getAttributes()['colspan'] : 1;
         let currentRowspan = selected.getAttributes()['rowspan'] ? selected.getAttributes()['rowspan'] : 1;
         let columnIndex = selected.collection.indexOf(selected);
@@ -236,7 +237,7 @@ export default (editor, opts = {}) => {
             if (i === 0 && x === 0 && currentColspan > 1) {
               x = 1;
             }
-            table.components().at(rowIndex + i).components().add({ type: 'cell' }, { at: (i === 0 ? columnIndex + 1 : columnIndex) });
+            table.components().at(rowIndex + i).components().add({ type: cellType }, { at: (i === 0 ? columnIndex + 1 : columnIndex) });
           }
         }
 
@@ -265,7 +266,7 @@ export default (editor, opts = {}) => {
         $('.toolbar-submenu').slideUp('slow');
         $('ul#toolbar-submenu-'+submenuToShow).slideDown('slow');
       } else {
-        if (selected && selected.is('cell') || selected.is('th')) {
+        if (selected && selected.is(cellType) || selected.is('th')) {
           let rowComponent = selected.parent();
           if ($('.' + submenuToHide + '-operations .toolbar-submenu').length > 0){
             $('.' + submenuToHide + '-operations .toolbar-submenu').slideUp('slow');
@@ -284,7 +285,7 @@ export default (editor, opts = {}) => {
                 <li class="table-toolbar-submenu-run-command" data-command="table-insert-row-above" ` + (selected.is('th') ? 'style="display: none;"' : '') + `><i class="fa fa-chevron-up" aria-hidden="true"></i> Insert row above</li>
                 <li class="table-toolbar-submenu-run-command" data-command="table-insert-row-below" ><i class="fa fa-chevron-down" aria-hidden="true"></i> Insert row below</li>
                 <li class="table-toolbar-submenu-run-command" data-command="table-delete-row" `+ (selected.is('th') ? 'style="display: none;"' : '') +` ><i class="fa fa-trash" aria-hidden="true"></i> Delete Row</li>
-                <li class="table-toolbar-submenu-run-command" data-command="table-toggle-header" `+ (selected.is('cell') ? 'style="display: none;"' : '') +`><i class="fa fa-trash" aria-hidden="true"></i> Remove Header</li>
+                <li class="table-toolbar-submenu-run-command" data-command="table-toggle-header" `+ (selected.is(cellType) ? 'style="display: none;"' : '') +`><i class="fa fa-trash" aria-hidden="true"></i> Remove Header</li>
                 <li id="button-merge-cells-right" class="table-toolbar-submenu-run-command" data-command="table-merge-cells-right" ` + (selected.collection.indexOf(selected) + 1 == selected.parent().components().length ? 'style="display: none;"' : '') + `><i class="fa fa-arrows-h" aria-hidden="true"></i> Merge cell right</li>
               </ul>
               `;

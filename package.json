@@ -1,6 +1,6 @@
 {
   "name": "grapesjs-blocks-table",
-  "version": "0.0.112",
+  "version": "0.0.117",
   "description": "grapesjs-blocks-table",
   "main": "dist/grapesjs-blocks-table.min.js",
   "repository": {

@@ -6,7 +6,7 @@ export default (comps, { modal, ...config }) => {
   const tblResizable = config.tblResizable;
   const nRows = "nRows"
   const nColumns = "nColumns"
-
+  const cellType = "tbl-cell";
   comps.addType('customTable', {
     isComponent: element => element.tagName === 'TABLE',
     model: {
@@ -60,7 +60,7 @@ export default (comps, { modal, ...config }) => {
         let header = this.props().hasHeader;
         let headers = [];
         for (let index = 0; index < this.props().nColumns; index++) {
-          cells.push({ type: 'cell' });
+          cells.push({ type: cellType });
         }
         for (let index = 0; index < this.props().nRows; index++) {
           this.components().add({ type: 'row', components: cells }, { at: -1 });

@@ -1,17 +1,19 @@
 import $ from "jquery";
 
 export default (comps, config) => {
-  const type = "cell";
+  const type = "tbl-cell";
   const cellsResizable = config.cellsResizable;
 
   comps.addType(type, {
     isComponent: el => el.tagName === 'TD',
     model: {
       defaults: {
+        name: 'Cell',
         tagName: 'td',
         draggable: false,
         removable: false,
         resizable: cellsResizable,
+        classes: [],
       }
     },
     view: {
@@ -26,16 +28,16 @@ export default (comps, config) => {
     }
   });
 
-
   comps.addType('th', {
     isComponent: el => el.tagName === 'TH',
     model: {
       defaults: {
+        name: 'Header Cell',
         tagName: 'th',
         draggable: false,
         removable: false,
         resizable: cellsResizable,
-        classes: ['gjs-cell'],
+        classes: [],
       }
     },
     view: {
