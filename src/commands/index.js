@@ -83,8 +83,8 @@ export default (editor, opts = {}) => {
 
         editor.selectRemove(selected);
         setTimeout(function() {
- editor.select(selected);
-}, 50);
+          editor.select(selected);
+        }, 50);
       }
     });
 
@@ -97,8 +97,8 @@ export default (editor, opts = {}) => {
 
         editor.selectRemove(selected);
         setTimeout(function() {
- editor.select(selected);
-}, 50);
+          editor.select(selected);
+        }, 50);
       }
     });
 
@@ -111,8 +111,8 @@ export default (editor, opts = {}) => {
         editor.selectRemove(selected);
 
         setTimeout(function() {
- editor.select(selected);
-}, 50);
+          editor.select(selected);
+        }, 50);
       }
     });
 
@@ -128,8 +128,8 @@ export default (editor, opts = {}) => {
         editor.selectRemove(selected);
 
         setTimeout(function() {
- editor.select(selected);
-}, 50);
+          editor.select(selected);
+        }, 50);
       }
     });
 
@@ -184,8 +184,8 @@ export default (editor, opts = {}) => {
         selected.addAttributes({ 'colspan': ++currentColspan });
         editor.selectRemove(selected);
         setTimeout(function() {
- editor.select(selected);
-}, 50);
+          editor.select(selected);
+        }, 50);
         if (columnIndex + 1 == selected.parent().components().length) {
           $('#button-merge-cells-right').hide();
         }
@@ -212,8 +212,8 @@ export default (editor, opts = {}) => {
         selected.addAttributes({ 'rowspan': ++currentRowspan });
         editor.selectRemove(selected);
         setTimeout(function() {
- editor.select(selected);
-}, 50);
+          editor.select(selected);
+        }, 50);
         if (rowIndex + 2 == table.components().length) {
           $('#button-merge-cells-down').hide();
         }
@@ -246,8 +246,8 @@ export default (editor, opts = {}) => {
 
         editor.selectRemove(selected);
         setTimeout(function() {
- editor.select(selected);
-}, 50);
+          editor.select(selected);
+        }, 50);
         $('#button-merge-cells-down').show();
         $('#button-merge-cells-right').show();
       }

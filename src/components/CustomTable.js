@@ -1,5 +1,4 @@
 import components from ".";
-import * as traitsHelper from "../traitsHelper"
 import * as tblHelper from "../tableHelper"
 
 export default (comps, { modal, ...config }) => {
