@@ -1,4 +1,5 @@
-import $ from "jquery";
+import $ from 'jquery';
+import * as tblHelper from './tableHelper'
 
 export default (editor, opts = {}) => {
   $(function() {

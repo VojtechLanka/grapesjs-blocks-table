@@ -13,8 +13,7 @@ export default (editor, opts = {}) => {
     ...opts,
   };
 
-  onLoad();
-  
+  onLoad(editor, options);
   components(editor, options)
   blocks(editor, options)
   commands(editor, options)
