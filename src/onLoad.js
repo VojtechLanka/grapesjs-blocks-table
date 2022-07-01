@@ -54,5 +54,29 @@ export default (editor, opts = {}) => {
     } else {
       style.appendChild(document.createTextNode(css));
     }
+
+    $(opts.containerId ? opts.containerId : document).on('click','li.table-toolbar-submenu-run-command', function() {
+      editor.runCommand(this.dataset.command);
+    });
+
+    $(opts.containerId ? opts.containerId : document).on('click','input#table-button-create-new', function() {
+      tblHelper.updateAttributesAndCloseModal(this.dataset.componentId)
+    });
+  });
+
+  editor.on('component:add', (model) => {
+    if (model.attributes.type === 'customTable' && model.components().length == 0) {
+      editor.runCommand('open-table-settings-modal', { model: model });
+    }
+  })
+
+  editor.on('component:selected', component => {
+    if (component.get('type') == tblHelper.cellType || component.get('type') == tblHelper.cellHeaderType) {
+      component.set('toolbar', tblHelper.getCellToolbar());
+    }
+
+    if(component.get('type') == 'customTable'){
+      component.set('toolbar', tblHelper.getTableToolbar(component));
+    }
   });
 };

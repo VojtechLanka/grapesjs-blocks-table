@@ -3,53 +3,6 @@ import * as tblHelper from '../tableHelper'
 
 export default (editor, opts = {}) => {
   const cmd = editor.Commands;
-  
-  $(function() {
-    $(opts.containerId ? opts.containerId : document).on('click','li.table-toolbar-submenu-run-command', function() {
-      editor.runCommand(this.dataset.command);
-    });
-
-    $(opts.containerId ? opts.containerId : document).on('click','input#table-button-create-new', function() {
-      tblHelper.updateAttributesAndCloseModal(this.dataset.componentId)
-    });
-  })
-
-  editor.on('component:add', (model) => {
-    if (model.attributes.type === 'customTable' && model.components().length == 0) {
-      editor.runCommand('open-table-settings-modal', { model: model });
-    }
-  })
-
-  const getCellToolbar = () => {
-    let toolbar = [
-      { attributes: { class: 'column-actions columns-operations', title: 'Columns operations' }, command: 'table-show-columns-operations' },
-      { attributes: { class: 'row-actions rows-operations', title: 'Rows operations' }, command: 'table-show-rows-operations' },
-      { attributes: { class: 'fa fa-arrow-up', title: 'Select parent component' }, command: 'table-select' }
-    ]
-    if (editor.getSelected().getAttributes()['colspan'] > 1 || editor.getSelected().getAttributes()['rowspan'] > 1) {
-      toolbar.push({ attributes: { class: 'fa fa fa-th-large', title: 'Unmerge cells' }, command: 'table-unmerge-cells' })
-    }
-    return toolbar;
-  }
-
-  const getTableToolbar = (component) => {
-    const tb = component.get('toolbar');
-    let settingExists = tb.find(o=> o.command === 'open-traits-settings');
-    if(!settingExists) {
-      tb.push({ command: 'open-traits-settings', attributes: {class: 'fa fa-cog', title: 'Settings'} });
-    }
-    return tb;
-  }
-
-  editor.on('component:selected', component => {
-    if (component.get('type') == tblHelper.cellType || component.get('type') == tblHelper.cellHeaderType) {
-      component.set('toolbar', getCellToolbar()); // set a toolbars
-    }
-
-    if(component.get('type') == 'customTable'){
-      component.set('toolbar', getTableToolbar(component));
-    }
-  });
 
   cmd.add('table-show-columns-operations', () => {
     tblHelper.updateTableToolbarSubmenu('columns', 'rows');

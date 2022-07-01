@@ -2,6 +2,27 @@ export const cellType = 'customCell';
 export const cellHeaderType = 'customHeaderCell';
 export const rowType = 'row';
 
+export const getCellToolbar = () => {
+  let toolbar = [
+    { attributes: { class: 'column-actions columns-operations', title: 'Columns operations' }, command: 'table-show-columns-operations' },
+    { attributes: { class: 'row-actions rows-operations', title: 'Rows operations' }, command: 'table-show-rows-operations' },
+    { attributes: { class: 'fa fa-arrow-up', title: 'Select parent component' }, command: 'table-select' }
+  ]
+  if (editor.getSelected().getAttributes()['colspan'] > 1 || editor.getSelected().getAttributes()['rowspan'] > 1) {
+    toolbar.push({ attributes: { class: 'fa fa fa-th-large', title: 'Unmerge cells' }, command: 'table-unmerge-cells' })
+  }
+  return toolbar;
+}
+
+export const getTableToolbar = (component) => {
+  const tb = component.get('toolbar');
+  let settingExists = tb.find(o=> o.command === 'open-traits-settings');
+  if(!settingExists) {
+    tb.push({ command: 'open-traits-settings', attributes: {class: 'fa fa-cog', title: 'Settings'} });
+  }
+  return tb;
+}
+
 export function insertColumn(tableComponent, addAtIndex, updateProps = false){
   tableComponent.components().forEach((component, index) => {
     if(index === 0 && tableComponent.props().hasHeaders) {
