@@ -36,10 +36,23 @@ export default (comps, { modal, ...config }) => {
             name: 'hasHeaders',
             label: 'Enable headers',
             changeProp: 1
-          }
+          },
+          {
+            type: 'button',
+            label: false,
+            name: 'highlightCells',
+            text: 'Toggle highlight cells with size',
+            command: editor => tblHelper.highlightCellsWithSize(editor.getSelected()),
+          },
+          {
+            type: 'button',
+            label: false,
+            name: 'highlightCellsRemove',
+            text: 'Clear all cells width and height',
+            command: editor => tblHelper.clearCellsWithSize(editor.getSelected()),
+          },
         ]
       },
-
       init() {
         if(!this.hasChildren()){
           this.createTable()
@@ -49,8 +62,8 @@ export default (comps, { modal, ...config }) => {
         this.listenTo(this, 'change:hasHeaders', this.headerChanged);
       },
       createTable(){
-        let calcWidth =  Number(this.props().nColumns)*46
-        let setWidth = calcWidth < 900? calcWidth:900;
+        let calcWidth =  Number(this.props().nColumns) * 46
+        let setWidth = calcWidth < 900? calcWidth : 900;
         let calcHeight = Number(this.props().nRows)*22
 
         this.setStyle({width:  setWidth + "px", height: calcHeight + "px"})

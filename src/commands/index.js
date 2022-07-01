@@ -33,12 +33,7 @@ export default (editor, opts = {}) => {
     const tb = component.get('toolbar');
     let settingExists = tb.find(o=> o.command === 'open-traits-settings');
     if(!settingExists) {
-      tb.push(
-        {
-            command: 'open-traits-settings',
-            attributes: {class: 'fa fa-cog', title: 'Settings'},
-        }
-      );
+      tb.push({ command: 'open-traits-settings', attributes: {class: 'fa fa-cog', title: 'Settings'} });
     }
     return tb;
   }
@@ -120,11 +115,9 @@ export default (editor, opts = {}) => {
     let selected = editor.getSelected();
     if (selected.is(cellType) || selected.is('th')) {
       let table = selected.parent().parent();
-
       let columnIndex = selected.collection.indexOf(selected);
 
       tblHelper.insertColumn(table, columnIndex + 1, true)
-
       editor.selectRemove(selected);
 
       setTimeout(function() {
