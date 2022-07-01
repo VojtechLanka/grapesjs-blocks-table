@@ -79,11 +79,7 @@ export default (editor, opts = {}) => {
       let rowComponent = selected.parent();
       let table = selected.parent().parent();
       tblHelper.insertRow(table, rowComponent.collection.indexOf(rowComponent), true)
-
-      editor.selectRemove(selected);
-      setTimeout(function() {
-        editor.select(selected);
-      }, 50);
+      tblHelper.refreshEditorSelected()
     }
   });
 
@@ -93,11 +89,7 @@ export default (editor, opts = {}) => {
       let rowComponent = selected.parent();
       let table = selected.parent().parent();
       tblHelper.insertRow(table, rowComponent.collection.indexOf(rowComponent) + 1, true)
-
-      editor.selectRemove(selected);
-      setTimeout(function() {
-        editor.select(selected);
-      }, 50);
+      tblHelper.refreshEditorSelected()
     }
   });
 
@@ -107,11 +99,7 @@ export default (editor, opts = {}) => {
       let table = selected.parent().parent();
       let columnIndex = selected.collection.indexOf(selected);
       tblHelper.insertColumn(table, columnIndex, true)
-      editor.selectRemove(selected);
-
-      setTimeout(function() {
-        editor.select(selected);
-      }, 50);
+      tblHelper.refreshEditorSelected()
     }
   });
 
@@ -122,11 +110,7 @@ export default (editor, opts = {}) => {
       let columnIndex = selected.collection.indexOf(selected);
 
       tblHelper.insertColumn(table, columnIndex + 1, true)
-      editor.selectRemove(selected);
-
-      setTimeout(function() {
-        editor.select(selected);
-      }, 50);
+      tblHelper.refreshEditorSelected()
     }
   });
 
@@ -179,10 +163,7 @@ export default (editor, opts = {}) => {
       }
 
       selected.addAttributes({ 'colspan': ++currentColspan });
-      editor.selectRemove(selected);
-      setTimeout(function() {
-        editor.select(selected);
-      }, 50);
+      tblHelper.refreshEditorSelected()
       if (columnIndex + 1 == selected.parent().components().length) {
         $('#button-merge-cells-right').hide();
       }
@@ -207,10 +188,7 @@ export default (editor, opts = {}) => {
       }
 
       selected.addAttributes({ 'rowspan': ++currentRowspan });
-      editor.selectRemove(selected);
-      setTimeout(function() {
-        editor.select(selected);
-      }, 50);
+      tblHelper.refreshEditorSelected()
       if (rowIndex + 2 == table.components().length) {
         $('#button-merge-cells-down').hide();
       }
@@ -241,10 +219,7 @@ export default (editor, opts = {}) => {
       selected.setAttributes({ 'colspan': 1 });
       selected.setAttributes({ 'rowspan': 1 });
 
-      editor.selectRemove(selected);
-      setTimeout(function() {
-        editor.select(selected);
-      }, 50);
+      tblHelper.refreshEditorSelected()
       $('#button-merge-cells-down').show();
       $('#button-merge-cells-right').show();
     }

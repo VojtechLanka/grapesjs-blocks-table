@@ -157,3 +157,9 @@ export function updateTableToolbarSubmenu (submenuToShow, submenuToHide) {
     }
   }
 }
+
+export function refreshEditorSelected() {
+  let selected = editor.getSelected();
+  editor.selectRemove(selected);
+  setTimeout(function() { editor.select(selected); }, 50);
+}
