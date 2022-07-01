@@ -51,9 +51,6 @@ export default (comps, { modal, ...config }) => {
         ]
       },
       init() {
-        if(!this.hasChildren()){
-          this.createTable()
-        }
         this.listenTo(this, 'change:nColumns', this.columnsChanged);
         this.listenTo(this, 'change:nRows', this.rowsChanged);
         this.listenTo(this, 'change:hasHeaders', this.headerChanged);

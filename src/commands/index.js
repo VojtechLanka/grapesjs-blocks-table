@@ -9,6 +9,10 @@ export default (editor, opts = {}) => {
     $(opts.containerId ? opts.containerId : document).on('click','li.table-toolbar-submenu-run-command', function() {
       editor.runCommand(this.dataset.command);
     });
+
+    $(opts.containerId ? opts.containerId : document).on('click','input#table-button-create-new', function() {
+      tblHelper.updateAttributesAndCloseModal(this.dataset.componentId)
+    });
   })
 
   editor.on('component:add', (model) => {
@@ -49,11 +53,11 @@ export default (editor, opts = {}) => {
   });
 
   cmd.add('table-show-columns-operations', () => {
-    updateTableToolbarSubmenu('columns', 'rows');
+    tblHelper.updateTableToolbarSubmenu('columns', 'rows');
   });
 
   cmd.add('table-show-rows-operations', () => {
-    updateTableToolbarSubmenu('rows', 'columns');
+    tblHelper.updateTableToolbarSubmenu('rows', 'columns');
   });
 
   cmd.add('table-toggle-header', ()=> {
@@ -252,53 +256,29 @@ export default (editor, opts = {}) => {
     }
   });
 
-  function updateTableToolbarSubmenu (submenuToShow, submenuToHide) {
-    let selected = editor.getSelected();
-    let currentMenu = $('ul#toolbar-submenu-'+submenuToShow);
-    if(currentMenu.length > 0){
-      $('.toolbar-submenu').slideUp('slow');
-      $('ul#toolbar-submenu-'+submenuToShow).slideDown('slow');
-    } else {
-      if (selected && selected.is(cellType) || selected.is('th')) {
-        let rowComponent = selected.parent();
-        if ($('.' + submenuToHide + '-operations .toolbar-submenu').length > 0){
-          $('.' + submenuToHide + '-operations .toolbar-submenu').slideUp('slow');
+  cmd.add('open-table-settings-modal', {
+    run(editor, sender, opts = {}) {
+      editor.Modal.open({
+        title: 'Create new Table',
+        content: `
+          <div class="new-table-form">
+            <label for="nColumns">Number of columns</label>
+            <input type="number" class="form-control" value="`+ opts.model.props()['nColumns'] + `" name="nColumns" id="nColumns" min="1">
+            <br>
+            <label for="nRows">Number of rows</label>
+            <input type="number" class="form-control" value="`+ opts.model.props()['nRows'] +`" name="nRows" id="nRows" min="1">
+          <div>
+          <input id="table-button-create-new" type="button" value="Create Table" data-component-id="`+ opts.model.cid +`">
+        `,
+      }).onceClose(() => {
+        if (!opts.model.components() || opts.model.components().length === 0) {
+          opts.model.remove();
         }
-        if ($('.' + submenuToShow + '-operations .toolbar-submenu').length > 0){
-          if ($('.' + submenuToShow + '-operations .toolbar-submenu').css('display') != 'none') {
-            $('.' + submenuToShow + '-operations .toolbar-submenu').slideUp('slow');
-            return;
-          }
-          $('.' + submenuToShow + '-operations .toolbar-submenu').slideDown('slow');
-        } else {
-          let htmlString = '';
-          if (submenuToShow === 'rows') {
-            htmlString = `
-            <ul id="toolbar-submenu-rows" class="toolbar-submenu ` + ($('.gjs-toolbar').position().left > 150 ? 'toolbar-submenu-right' : '') + `" style="display: none;">
-              <li class="table-toolbar-submenu-run-command" data-command="table-insert-row-above" ` + (selected.is('th') ? 'style="display: none;"' : '') + `><i class="fa fa-chevron-up" aria-hidden="true"></i> Insert row above</li>
-              <li class="table-toolbar-submenu-run-command" data-command="table-insert-row-below" ><i class="fa fa-chevron-down" aria-hidden="true"></i> Insert row below</li>
-              <li class="table-toolbar-submenu-run-command" data-command="table-delete-row" `+ (selected.is('th') ? 'style="display: none;"' : '') +` ><i class="fa fa-trash" aria-hidden="true"></i> Delete Row</li>
-              <li class="table-toolbar-submenu-run-command" data-command="table-toggle-header" `+ (selected.is(cellType) ? 'style="display: none;"' : '') +`><i class="fa fa-trash" aria-hidden="true"></i> Remove Header</li>
-              <li id="button-merge-cells-right" class="table-toolbar-submenu-run-command" data-command="table-merge-cells-right" ` + (selected.collection.indexOf(selected) + 1 == selected.parent().components().length ? 'style="display: none;"' : '') + `><i class="fa fa-arrows-h" aria-hidden="true"></i> Merge cell right</li>
-            </ul>
-            `;
-          } else {
-            let rowspan = selected.getAttributes()['rowspan'] ? selected.getAttributes()['rowspan'] : 0;
-
-            htmlString = `
-            <ul id="toolbar-submenu-columns" class="toolbar-submenu ` + ($('.gjs-toolbar').position().left > 150 ? 'toolbar-submenu-right' : '') + `" style="display: none;">
-              <li class="table-toolbar-submenu-run-command" data-command="table-insert-column-left" ><i class="fa fa-chevron-left" aria-hidden="true"></i> Insert column left</li>
-              <li class="table-toolbar-submenu-run-command" data-command="table-insert-column-right" ><i class="fa fa-chevron-right" aria-hidden="true"></i> Insert column right</li>
-              <li class="table-toolbar-submenu-run-command" data-command="table-delete-column" ><i class="fa fa-trash" aria-hidden="true"></i> Delete column</li>
-              <li id="button-merge-cells-down" class="table-toolbar-submenu-run-command" data-command="table-merge-cells-down" ` + (rowComponent.collection.indexOf(rowComponent) + rowspan == rowComponent.parent().components().length || selected.is('th') ? 'style="display: none;"' : '') + `><i class="fa fa-arrows-v" aria-hidden="true"></i> Merge cell down</li>
-            </ul>
-            `;
-          }
-          $('.toolbar-submenu').slideUp('slow');
-          $('.' + submenuToShow + '-operations').parent().append(htmlString);
-          $('ul#toolbar-submenu-'+submenuToShow).slideDown('slow');
-        }
-      }
-    }
-  }
+        this.stopCommand()
+      });
+    },
+    stop(editor) {
+      editor.Modal.close();
+    },
+  });
 };
