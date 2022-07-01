@@ -1,5 +1,5 @@
-import CustomTable from "./CustomTable";
-import TableCell from "./TableCell";
+import CustomTable from './CustomTable';
+import TableCell from './TableCell';
 
 export default (editor, config = {}) => {
   const domc = editor.DomComponents;

@@ -1,4 +1,4 @@
-import * as tblHelper from "../tableHelper"
+import * as tblHelper from '../tableHelper'
 
 export default (comps, { modal, ...config }) => {
   const tblResizable = config.tblResizable;
@@ -59,7 +59,7 @@ export default (comps, { modal, ...config }) => {
         let setWidth = calcWidth < 900? calcWidth : 900;
         let calcHeight = Number(this.props().nRows)*22
 
-        this.setStyle({width:  setWidth + "px", height: calcHeight + "px"})
+        this.setStyle({width:  setWidth + 'px', height: calcHeight + 'px'})
 
         let cells = [];
         let header = this.props().hasHeader;

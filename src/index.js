@@ -7,8 +7,8 @@ export default (editor, opts = {}) => {
   const options = {
     ...{
       tblResizable: true,
-      cellsResizable:true,
-      traitsPanelId:"#open-tm"
+      cellsResizable: true,
+      traitsPanelId: '#open-tm'
     },
     ...opts,
   };

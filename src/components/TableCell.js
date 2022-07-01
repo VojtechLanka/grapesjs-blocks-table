@@ -1,5 +1,5 @@
-import $ from "jquery";
-import * as tblHelper from "../tableHelper"
+import $ from 'jquery';
+import * as tblHelper from '../tableHelper'
 
 export default (comps, config) => {
   const cellsResizable = config.cellsResizable;
