@@ -1,10 +1,7 @@
-import components from ".";
 import * as tblHelper from "../tableHelper"
 
 export default (comps, { modal, ...config }) => {
   const tblResizable = config.tblResizable;
-  const nRows = "nRows"
-  const nColumns = "nColumns"
   const cellType = "tbl-cell";
   comps.addType('customTable', {
     isComponent: element => element.tagName === 'TABLE',
