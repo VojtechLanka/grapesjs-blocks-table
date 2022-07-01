@@ -19,7 +19,7 @@
     "grapesjs-table"
   ],
   "devDependencies": {
-    "grapesjs-cli": "^1.0.13"
+    "grapesjs-cli": "^3.0.1"
   },
   "license": "MIT",
   "bugs": {
