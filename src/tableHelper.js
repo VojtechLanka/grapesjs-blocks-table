@@ -187,3 +187,9 @@ export function refreshEditorSelected() {
   editor.selectRemove(selected);
   setTimeout(function() { editor.select(selected); }, 50);
 }
+
+export function getAllComponents (model, result = []) {
+  result.push(model);
+  model.components().each(mod => getAllComponents(mod, result))
+  return result;
+}
