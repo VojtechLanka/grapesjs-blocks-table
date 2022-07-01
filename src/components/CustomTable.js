@@ -2,7 +2,6 @@ import * as tblHelper from "../tableHelper"
 
 export default (comps, { modal, ...config }) => {
   const tblResizable = config.tblResizable;
-  const cellType = "tbl-cell";
   comps.addType('customTable', {
     isComponent: element => element.tagName === 'TABLE',
     model: {
@@ -66,16 +65,16 @@ export default (comps, { modal, ...config }) => {
         let header = this.props().hasHeader;
         let headers = [];
         for (let index = 0; index < this.props().nColumns; index++) {
-          cells.push({ type: cellType });
+          cells.push({ type: tblHelper.cellType });
         }
         for (let index = 0; index < this.props().nRows; index++) {
-          this.components().add({ type: 'row', components: cells }, { at: -1 });
+          this.components().add({ type: tblHelper.rowType, components: cells }, { at: -1 });
         }
         if(header) {
           for (let index = 0; index < this.props().nColumns; index++) {
-            headers.push({ type: 'th' });
+            headers.push({ type: tblHelper.cellHeaderType });
           }
-          this.components().add({ type: 'row', components: headers }, { at: 0 });
+          this.components().add({ type: tblHelper.rowType, components: headers }, { at: 0 });
         }
       },
       columnsChanged(selected, value, opts) {
@@ -116,14 +115,14 @@ export default (comps, { modal, ...config }) => {
         }
       },
       checkHeaderExists(){
-        return this.components().at(0).components().at(0).is('th')
+        return this.components().at(0).components().at(0).is(tblHelper.cellHeaderType)
       },
       hasChildren(){
         return this.components().length > 0
       },
       rowCount(){
         let rowCount = this.components().length
-        if(this.components().at(0).components().at(0).is('th'))
+        if(this.components().at(0).components().at(0).is(tblHelper.cellHeaderType))
           rowCount--
         return rowCount
       },
