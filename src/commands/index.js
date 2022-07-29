@@ -189,11 +189,14 @@ export default (editor, opts = {}) => {
         title: 'Create new Table',
         content: `
           <div class="new-table-form">
-            <label for="nColumns">Number of columns</label>
-            <input type="number" class="form-control" value="`+ opts.model.props()['nColumns'] + `" name="nColumns" id="nColumns" min="1">
-            <br>
-            <label for="nRows">Number of rows</label>
-            <input type="number" class="form-control" value="`+ opts.model.props()['nRows'] +`" name="nRows" id="nRows" min="1">
+            <div>
+              <label for="nColumns">Number of columns</label>
+              <input type="number" class="form-control" value="`+ opts.model.props()['nColumns'] + `" name="nColumns" id="nColumns" min="1">
+            </div>
+            <div>
+              <label for="nRows">Number of rows</label>
+              <input type="number" class="form-control" value="`+ opts.model.props()['nRows'] +`" name="nRows" id="nRows" min="1">
+            </div>
           <div>
           <input id="table-button-create-new" type="button" value="Create Table" data-component-id="`+ opts.model.cid +`">
         `,

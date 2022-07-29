@@ -2,7 +2,7 @@ import $ from 'jquery';
 import * as tblHelper from './tableHelper'
 
 export default (editor, opts = {}) => {
-  $(function() {
+
     let css =`
       .column-actions {
         background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke="%23ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h3M3 21h3m0 0h4a2 2 0 0 0 2-2V9M6 21V9m0-6h4a2 2 0 0 1 2 2v4M6 3v6M3 9h3m0 0h6m-9 6h9m3-3h3m0 0h3m-3 0v3m0-3V9"/></svg>');
@@ -28,8 +28,8 @@ export default (editor, opts = {}) => {
         margin: 2px 3px;
       }
       .new-table-form label { 
-        width: 160px;
-        float: left;
+        min-width: 160px;
+        display: inline-block;
       }
       .new-table-form .form-control { 
         padding: 3px 5px;
