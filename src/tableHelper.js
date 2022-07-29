@@ -139,7 +139,7 @@ export function updateTableToolbarSubmenu (submenuToShow, submenuToHide) {
     $('.toolbar-submenu').slideUp('slow');
     $('ul#toolbar-submenu-'+submenuToShow).slideDown('slow');
   } else {
-    if (selected && selected.is(cellType) || selected.is(cellHeaderType)) {
+    if (selected && (selected.is(cellType) || selected.is(cellHeaderType))) {
       let rowComponent = selected.parent();
       if ($('.' + submenuToHide + '-operations .toolbar-submenu').length > 0){
         $('.' + submenuToHide + '-operations .toolbar-submenu').slideUp('slow');
