@@ -26,7 +26,7 @@ Plugin for GrapesJS that adds table block.
   var editor = grapesjs.init({
       container : '#gjs',
       ...
-      plugins: ['gjs-blocks-table'],
+      plugins: ['grapesjs-blocks-table'],
       pluginsOpts: { 'grapesjs-blocks-table' : { 'containerId' : '#gjs' } },
   });
 </script>
