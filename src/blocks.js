@@ -1,7 +1,7 @@
 export default (editor, options = {}) => {
-  const bm = editor.BlockManager;
+  const blockManager = editor.BlockManager;
   
-  bm.add('table-block', {
+  blockManager.add('table-block', {
     label: 'Table',
     category: 'Basic',
     attributes: {

@@ -1,8 +1,8 @@
 import * as tblHelper from '../tableHelper'
 
-export default (comps, options) => {
+export default (domComponents, options) => {
   const tblResizable = options.tblResizable;
-  comps.addType('customTable', {
+  domComponents.addType('customTable', {
     isComponent: element => element.tagName === 'TABLE',
     model: {
       defaults: {

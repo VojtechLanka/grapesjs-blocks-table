@@ -2,8 +2,8 @@ import CustomTable from './CustomTable';
 import TableCell from './TableCell';
 
 export default (editor, options = {}) => {
-  const domc = editor.DomComponents;
+  const domComponents = editor.DomComponents;
 
-  CustomTable(domc, options);
-  TableCell(domc, options);
+  CustomTable(domComponents, options);
+  TableCell(domComponents, options);
 };

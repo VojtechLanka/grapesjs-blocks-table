@@ -1,10 +1,9 @@
 import $ from 'jquery';
-import * as tblHelper from '../tableHelper'
 
-export default (comps, options) => {
+export default (domComponents, options) => {
   const cellsResizable = options.cellsResizable;
 
-  comps.addType(options.componentCell, {
+  domComponents.addType(options.componentCell, {
     isComponent: el => el.tagName === 'TD',
     model: {
       defaults: {
@@ -28,7 +27,7 @@ export default (comps, options) => {
     }
   });
 
-  comps.addType(options.componentCellHeader, {
+  domComponents.addType(options.componentCellHeader, {
     isComponent: el => el.tagName === 'TH',
     model: {
       defaults: {

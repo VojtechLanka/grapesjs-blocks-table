@@ -2,17 +2,17 @@ import $ from 'jquery';
 import * as tblHelper from '../tableHelper'
 
 export default (editor, options = {}) => {
-  const cmd = editor.Commands;
+  const commands = editor.Commands;
 
-  cmd.add('table-show-columns-operations', () => {
+  commands.add('table-show-columns-operations', () => {
     tblHelper.updateTableToolbarSubmenu('columns', 'rows', options.componentCell, options.componentCellHeader);
   });
 
-  cmd.add('table-show-rows-operations', () => {
+  commands.add('table-show-rows-operations', () => {
     tblHelper.updateTableToolbarSubmenu('rows', 'columns', options.componentCell, options.componentCellHeader);
   });
 
-  cmd.add('table-toggle-header', ()=> {
+  commands.add('table-toggle-header', ()=> {
     let selected = editor.getSelected();
     if (selected.is(options.componentCellHeader)) {
       let table = selected.parent().parent();
@@ -20,12 +20,12 @@ export default (editor, options = {}) => {
     }
   });
 
-  cmd.add('table-select', editor => {
+  commands.add('table-select', editor => {
     editor.runCommand('core:component-exit');
     editor.runCommand('core:component-exit');
   });
 
-  cmd.add('table-insert-row-above', editor => {
+  commands.add('table-insert-row-above', editor => {
     let selected = editor.getSelected();
     if (selected.is(options.componentCell)) {
       let rowComponent = selected.parent();
@@ -35,7 +35,7 @@ export default (editor, options = {}) => {
     }
   });
 
-  cmd.add('table-insert-row-below', editor => {
+  commands.add('table-insert-row-below', editor => {
     let selected = editor.getSelected();
     if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
       let rowComponent = selected.parent();
@@ -45,7 +45,7 @@ export default (editor, options = {}) => {
     }
   });
 
-  cmd.add('table-insert-column-left', editor => {
+  commands.add('table-insert-column-left', editor => {
     let selected = editor.getSelected();
     if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
       let table = selected.parent().parent();
@@ -55,7 +55,7 @@ export default (editor, options = {}) => {
     }
   });
 
-  cmd.add('table-insert-column-right', editor => {
+  commands.add('table-insert-column-right', editor => {
     let selected = editor.getSelected();
     if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
       let table = selected.parent().parent();
@@ -66,7 +66,7 @@ export default (editor, options = {}) => {
     }
   });
 
-  cmd.add('table-delete-row', editor => {
+  commands.add('table-delete-row', editor => {
     let selected = editor.getSelected();
     if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
       let table = selected.parent().parent();
@@ -82,7 +82,7 @@ export default (editor, options = {}) => {
     }
   });
 
-  cmd.add('table-delete-column', editor => {
+  commands.add('table-delete-column', editor => {
     let selected = editor.getSelected();
     if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
       let table = selected.parent().parent();
@@ -97,7 +97,7 @@ export default (editor, options = {}) => {
     }
   });
 
-  cmd.add('table-merge-cells-right', editor => {
+  commands.add('table-merge-cells-right', editor => {
     let selected = editor.getSelected();
     if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
       let currentColspan = selected.getAttributes()['colspan'] ? selected.getAttributes()['colspan'] : 1;
@@ -122,7 +122,7 @@ export default (editor, options = {}) => {
     }
   });
 
-  cmd.add('table-merge-cells-down', editor => {
+  commands.add('table-merge-cells-down', editor => {
     let selected = editor.getSelected();
     if (selected.is(options.componentCell)) {
       let currentColspan = selected.getAttributes()['colspan'] ? selected.getAttributes()['colspan'] : 1;
@@ -147,7 +147,7 @@ export default (editor, options = {}) => {
     }
   });
 
-  cmd.add('table-unmerge-cells', editor => {
+  commands.add('table-unmerge-cells', editor => {
     let selected = editor.getSelected();
     if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
       let currentColspan = selected.getAttributes()['colspan'] ? selected.getAttributes()['colspan'] : 1;
@@ -177,13 +177,13 @@ export default (editor, options = {}) => {
     }
   });
 
-  cmd.add('open-traits-settings', {
+  commands.add('open-traits-settings', {
     run(editor, sender, opts = {}) {
       editor.Panels.getButton('views', 'open-tm').set('active', true);
     }
   });
 
-  cmd.add('open-table-settings-modal', {
+  commands.add('open-table-settings-modal', {
     run(editor, sender, opts = {}) {
       editor.Modal.open({
         title: 'Create new Table',
