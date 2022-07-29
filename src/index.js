@@ -7,6 +7,9 @@ export default (editor, options = {}) => {
   const optionsDefault = {
     tblResizable: true,
     cellsResizable: true,
+    cellType: 'customCell',
+    cellHeaderType: 'customHeaderCell',
+    rowType: 'row'
     }
 
   const optionsUpdated = {

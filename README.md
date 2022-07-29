@@ -9,6 +9,9 @@ Plugin for GrapesJS that adds table block.
 |`containerId`|Container to wich will be binded jQuery Event handlers to control adding new table and handler for adding and removing rows and columns.|`document`|
 |`tblResizable`|Should the table have resize handles|`true`|
 |`cellsResizable`|Should cells within the table have resize handles|`true`|
+|`cellType`|Id of component that should be used for cells|`customCell`|
+|`cellHeaderType`|Id of component that should be used for header cells|`customHeaderCell`|
+|`rowType`|Id of component that should be used for header rows|`row`|
 
 ## Usage
 

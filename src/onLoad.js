@@ -73,7 +73,7 @@ export default (editor, options = {}) => {
   })
 
   editor.on('component:selected', component => {
-    if (component.get('type') == tblHelper.cellType || component.get('type') == tblHelper.cellHeaderType) {
+    if (component.get('type') == options.cellType || component.get('type') == options.cellHeaderType) {
       component.set('toolbar', tblHelper.getCellToolbar());
     }
 

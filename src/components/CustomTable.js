@@ -65,16 +65,16 @@ export default (comps, options) => {
         let header = this.props().hasHeader;
         let headers = [];
         for (let index = 0; index < this.props().nColumns; index++) {
-          cells.push({ type: tblHelper.cellType });
+          cells.push({ type: options.cellType });
         }
         for (let index = 0; index < this.props().nRows; index++) {
-          this.components().add({ type: tblHelper.rowType, components: cells }, { at: -1 });
+          this.components().add({ type: options.rowType, components: cells }, { at: -1 });
         }
         if(header) {
           for (let index = 0; index < this.props().nColumns; index++) {
-            headers.push({ type: tblHelper.cellHeaderType });
+            headers.push({ type: options.cellHeaderType });
           }
-          this.components().add({ type: tblHelper.rowType, components: headers }, { at: 0 });
+          this.components().add({ type: options.rowType, components: headers }, { at: 0 });
         }
       },
       columnsChanged(selected, value, opts) {
@@ -89,7 +89,7 @@ export default (comps, options) => {
           }
         } else {
           for(let i=0;i<difference; i++){
-            tblHelper.insertColumn(this, this.columnCount())
+            tblHelper.insertColumn(this, this.columnCount(), options.cellType, options.cellHeaderType)
           }
         }
       },
@@ -105,24 +105,24 @@ export default (comps, options) => {
           }
         } else {
           for(let i=0;i<difference; i++){
-            tblHelper.insertRow(this, this.rowCount())
+            tblHelper.insertRow(this, this.rowCount(), options.rowType, options.cellType)
           }
         }
       },
       headerChanged(selected, value, opts) {
         if(this.checkHeaderExists() != this.props().hasHeaders) {
-          tblHelper.toggleHeaderRow(this)
+          tblHelper.toggleHeaderRow(this, options.rowType, options.cellHeaderType)
         }
       },
       checkHeaderExists(){
-        return this.components().at(0).components().at(0).is(tblHelper.cellHeaderType)
+        return this.components().at(0).components().at(0).is(options.cellHeaderType)
       },
       hasChildren(){
         return this.components().length > 0
       },
       rowCount(){
         let rowCount = this.components().length
-        if(this.components().at(0).components().at(0).is(tblHelper.cellHeaderType))
+        if(this.components().at(0).components().at(0).is(options.cellHeaderType))
           rowCount--
         return rowCount
       },

@@ -1,7 +1,3 @@
-export const cellType = 'customCell';
-export const cellHeaderType = 'customHeaderCell';
-export const rowType = 'row';
-
 export const getCellToolbar = () => {
   let toolbar = [
     { attributes: { class: 'column-actions columns-operations', title: 'Columns operations' }, command: 'table-show-columns-operations' },
@@ -23,7 +19,7 @@ export const getTableToolbar = (component) => {
   return tb;
 }
 
-export function insertColumn(tableComponent, addAtIndex, updateProps = false){
+export function insertColumn(tableComponent, addAtIndex, cellType, cellHeaderType, updateProps = false){
   tableComponent.components().forEach((component, index) => {
     if(index === 0 && tableComponent.props().hasHeaders) {
       component.components().add({ type: cellHeaderType }, {at: addAtIndex});
@@ -37,7 +33,7 @@ export function insertColumn(tableComponent, addAtIndex, updateProps = false){
   }
 }
 
-export function insertRow(tableComponent, addAtIndex, updateProps = false){
+export function insertRow(tableComponent, addAtIndex, rowType, cellType, updateProps = false){
   tableComponent.components().add({
     type: rowType,
     components: [...Array(tableComponent.components().at(0).components().length).keys()].map(() => ({ type: cellType }))
@@ -66,7 +62,7 @@ export function removeRow(tableComponent, removeAtIndex, updateProps = false) {
   }
 }
 
-export function toggleHeaderRow(tableComponent, updateProps = false){
+export function toggleHeaderRow(tableComponent, rowType, cellHeaderType, updateProps = false){
   let toggleOn = updateProps == false? tableComponent.props().hasHeaders: !tableComponent.props().hasHeaders;
   if(toggleOn) {
     let headers = [];
@@ -132,7 +128,7 @@ export function updateAttributesAndCloseModal (componentId) {
   editor.Modal.close();
 }
 
-export function updateTableToolbarSubmenu (submenuToShow, submenuToHide) {
+export function updateTableToolbarSubmenu (submenuToShow, submenuToHide, cellType, cellHeaderType) {
   let selected = editor.getSelected();
   let currentMenu = $('ul#toolbar-submenu-'+submenuToShow);
   if(currentMenu.length > 0){
