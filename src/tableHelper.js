@@ -19,12 +19,12 @@ export const getTableToolbar = (component) => {
   return tb;
 }
 
-export function insertColumn(tableComponent, addAtIndex, cellType, cellHeaderType, updateProps = false){
+export function insertColumn(tableComponent, addAtIndex, componentCell, componentCellHeader, updateProps = false){
   tableComponent.components().forEach((component, index) => {
     if(index === 0 && tableComponent.props().hasHeaders) {
-      component.components().add({ type: cellHeaderType }, {at: addAtIndex});
+      component.components().add({ type: componentCellHeader }, {at: addAtIndex});
     } else {
-      component.components().add({ type: cellType }, {at: addAtIndex});
+      component.components().add({ type: componentCell }, {at: addAtIndex});
     }
   });
 
@@ -33,10 +33,10 @@ export function insertColumn(tableComponent, addAtIndex, cellType, cellHeaderTyp
   }
 }
 
-export function insertRow(tableComponent, addAtIndex, rowType, cellType, updateProps = false){
+export function insertRow(tableComponent, addAtIndex, componentRow, componentCell, updateProps = false){
   tableComponent.components().add({
-    type: rowType,
-    components: [...Array(tableComponent.components().at(0).components().length).keys()].map(() => ({ type: cellType }))
+    type: componentRow,
+    components: [...Array(tableComponent.components().at(0).components().length).keys()].map(() => ({ type: componentCell }))
   }, {
     at: addAtIndex
   });
@@ -62,14 +62,14 @@ export function removeRow(tableComponent, removeAtIndex, updateProps = false) {
   }
 }
 
-export function toggleHeaderRow(tableComponent, rowType, cellHeaderType, updateProps = false){
+export function toggleHeaderRow(tableComponent, componentRow, componentCellHeader, updateProps = false){
   let toggleOn = updateProps == false? tableComponent.props().hasHeaders: !tableComponent.props().hasHeaders;
   if(toggleOn) {
     let headers = [];
     for (let index = 0; index < tableComponent.props().nColumns; index++) {
-      headers.push({ type: cellHeaderType });
+      headers.push({ type: componentCellHeader });
     }
-    tableComponent.components().add({ type: rowType, components: headers }, { at: 0 });
+    tableComponent.components().add({ type: componentRow, components: headers }, { at: 0 });
   } else {
     tableComponent.components().at(0).remove()
   }
@@ -128,14 +128,14 @@ export function updateAttributesAndCloseModal (componentId) {
   editor.Modal.close();
 }
 
-export function updateTableToolbarSubmenu (submenuToShow, submenuToHide, cellType, cellHeaderType) {
+export function updateTableToolbarSubmenu (submenuToShow, submenuToHide, componentCell, componentCellHeader) {
   let selected = editor.getSelected();
   let currentMenu = $('ul#toolbar-submenu-'+submenuToShow);
   if(currentMenu.length > 0){
     $('.toolbar-submenu').slideUp('slow');
     $('ul#toolbar-submenu-'+submenuToShow).slideDown('slow');
   } else {
-    if (selected && (selected.is(cellType) || selected.is(cellHeaderType))) {
+    if (selected && (selected.is(componentCell) || selected.is(componentCellHeader))) {
       let rowComponent = selected.parent();
       if ($('.' + submenuToHide + '-operations .toolbar-submenu').length > 0){
         $('.' + submenuToHide + '-operations .toolbar-submenu').slideUp('slow');
@@ -151,10 +151,10 @@ export function updateTableToolbarSubmenu (submenuToShow, submenuToHide, cellTyp
         if (submenuToShow === 'rows') {
           htmlString = `
           <ul id="toolbar-submenu-rows" class="toolbar-submenu ` + ($('.gjs-toolbar').position().left > 150 ? 'toolbar-submenu-right' : '') + `" style="display: none;">
-            <li class="table-toolbar-submenu-run-command" data-command="table-insert-row-above" ` + (selected.is(cellHeaderType) ? 'style="display: none;"' : '') + `><i class="fa fa-chevron-up" aria-hidden="true"></i> Insert row above</li>
+            <li class="table-toolbar-submenu-run-command" data-command="table-insert-row-above" ` + (selected.is(componentCellHeader) ? 'style="display: none;"' : '') + `><i class="fa fa-chevron-up" aria-hidden="true"></i> Insert row above</li>
             <li class="table-toolbar-submenu-run-command" data-command="table-insert-row-below" ><i class="fa fa-chevron-down" aria-hidden="true"></i> Insert row below</li>
-            <li class="table-toolbar-submenu-run-command" data-command="table-delete-row" `+ (selected.is(cellHeaderType) ? 'style="display: none;"' : '') +` ><i class="fa fa-trash" aria-hidden="true"></i> Delete Row</li>
-            <li class="table-toolbar-submenu-run-command" data-command="table-toggle-header" `+ (selected.is(cellType) ? 'style="display: none;"' : '') +`><i class="fa fa-trash" aria-hidden="true"></i> Remove Header</li>
+            <li class="table-toolbar-submenu-run-command" data-command="table-delete-row" `+ (selected.is(componentCellHeader) ? 'style="display: none;"' : '') +` ><i class="fa fa-trash" aria-hidden="true"></i> Delete Row</li>
+            <li class="table-toolbar-submenu-run-command" data-command="table-toggle-header" `+ (selected.is(componentCell) ? 'style="display: none;"' : '') +`><i class="fa fa-trash" aria-hidden="true"></i> Remove Header</li>
             <li id="button-merge-cells-right" class="table-toolbar-submenu-run-command" data-command="table-merge-cells-right" ` + (selected.collection.indexOf(selected) + 1 == selected.parent().components().length ? 'style="display: none;"' : '') + `><i class="fa fa-arrows-h" aria-hidden="true"></i> Merge cell right</li>
           </ul>
           `;
@@ -166,7 +166,7 @@ export function updateTableToolbarSubmenu (submenuToShow, submenuToHide, cellTyp
             <li class="table-toolbar-submenu-run-command" data-command="table-insert-column-left" ><i class="fa fa-chevron-left" aria-hidden="true"></i> Insert column left</li>
             <li class="table-toolbar-submenu-run-command" data-command="table-insert-column-right" ><i class="fa fa-chevron-right" aria-hidden="true"></i> Insert column right</li>
             <li class="table-toolbar-submenu-run-command" data-command="table-delete-column" ><i class="fa fa-trash" aria-hidden="true"></i> Delete column</li>
-            <li id="button-merge-cells-down" class="table-toolbar-submenu-run-command" data-command="table-merge-cells-down" ` + (rowComponent.collection.indexOf(rowComponent) + rowspan == rowComponent.parent().components().length || selected.is(cellHeaderType) ? 'style="display: none;"' : '') + `><i class="fa fa-arrows-v" aria-hidden="true"></i> Merge cell down</li>
+            <li id="button-merge-cells-down" class="table-toolbar-submenu-run-command" data-command="table-merge-cells-down" ` + (rowComponent.collection.indexOf(rowComponent) + rowspan == rowComponent.parent().components().length || selected.is(componentCellHeader) ? 'style="display: none;"' : '') + `><i class="fa fa-arrows-v" aria-hidden="true"></i> Merge cell down</li>
           </ul>
           `;
         }

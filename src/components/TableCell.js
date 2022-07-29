@@ -4,7 +4,7 @@ import * as tblHelper from '../tableHelper'
 export default (comps, options) => {
   const cellsResizable = options.cellsResizable;
 
-  comps.addType(options.cellType, {
+  comps.addType(options.componentCell, {
     isComponent: el => el.tagName === 'TD',
     model: {
       defaults: {
@@ -28,7 +28,7 @@ export default (comps, options) => {
     }
   });
 
-  comps.addType(options.cellHeaderType, {
+  comps.addType(options.componentCellHeader, {
     isComponent: el => el.tagName === 'TH',
     model: {
       defaults: {

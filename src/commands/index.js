@@ -5,18 +5,18 @@ export default (editor, options = {}) => {
   const cmd = editor.Commands;
 
   cmd.add('table-show-columns-operations', () => {
-    tblHelper.updateTableToolbarSubmenu('columns', 'rows', options.cellType, options.cellHeaderType);
+    tblHelper.updateTableToolbarSubmenu('columns', 'rows', options.componentCell, options.componentCellHeader);
   });
 
   cmd.add('table-show-rows-operations', () => {
-    tblHelper.updateTableToolbarSubmenu('rows', 'columns', options.cellType, options.cellHeaderType);
+    tblHelper.updateTableToolbarSubmenu('rows', 'columns', options.componentCell, options.componentCellHeader);
   });
 
   cmd.add('table-toggle-header', ()=> {
     let selected = editor.getSelected();
-    if (selected.is(options.cellHeaderType)) {
+    if (selected.is(options.componentCellHeader)) {
       let table = selected.parent().parent();
-      tblHelper.toggleHeaderRow(table, options.rowType, options.cellHeaderType, true)
+      tblHelper.toggleHeaderRow(table, options.componentRow, options.componentCellHeader, true)
     }
   });
 
@@ -27,48 +27,48 @@ export default (editor, options = {}) => {
 
   cmd.add('table-insert-row-above', editor => {
     let selected = editor.getSelected();
-    if (selected.is(options.cellType)) {
+    if (selected.is(options.componentCell)) {
       let rowComponent = selected.parent();
       let table = selected.parent().parent();
-      tblHelper.insertRow(table, rowComponent.collection.indexOf(rowComponent), options.rowType, options.cellType, true)
+      tblHelper.insertRow(table, rowComponent.collection.indexOf(rowComponent), options.componentRow, options.componentCell, true)
       tblHelper.refreshEditorSelected()
     }
   });
 
   cmd.add('table-insert-row-below', editor => {
     let selected = editor.getSelected();
-    if (selected.is(options.cellType) || selected.is(options.cellHeaderType)) {
+    if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
       let rowComponent = selected.parent();
       let table = selected.parent().parent();
-      tblHelper.insertRow(table, rowComponent.collection.indexOf(rowComponent) + 1, options.rowType, options.cellType, true)
+      tblHelper.insertRow(table, rowComponent.collection.indexOf(rowComponent) + 1, options.componentRow, options.componentCell, true)
       tblHelper.refreshEditorSelected()
     }
   });
 
   cmd.add('table-insert-column-left', editor => {
     let selected = editor.getSelected();
-    if (selected.is(options.cellType) || selected.is(options.cellHeaderType)) {
+    if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
       let table = selected.parent().parent();
       let columnIndex = selected.collection.indexOf(selected);
-      tblHelper.insertColumn(table, columnIndex, options.cellType, options.cellHeaderType, true)
+      tblHelper.insertColumn(table, columnIndex, options.componentCell, options.componentCellHeader, true)
       tblHelper.refreshEditorSelected()
     }
   });
 
   cmd.add('table-insert-column-right', editor => {
     let selected = editor.getSelected();
-    if (selected.is(options.cellType) || selected.is(options.cellHeaderType)) {
+    if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
       let table = selected.parent().parent();
       let columnIndex = selected.collection.indexOf(selected);
 
-      tblHelper.insertColumn(table, columnIndex + 1, options.cellType, options.cellHeaderType, true)
+      tblHelper.insertColumn(table, columnIndex + 1, options.componentCell, options.componentCellHeader, true)
       tblHelper.refreshEditorSelected()
     }
   });
 
   cmd.add('table-delete-row', editor => {
     let selected = editor.getSelected();
-    if (selected.is(options.cellType) || selected.is(options.cellHeaderType)) {
+    if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
       let table = selected.parent().parent();
       editor.selectRemove(selected);
       let rowComponent = selected.parent();
@@ -84,7 +84,7 @@ export default (editor, options = {}) => {
 
   cmd.add('table-delete-column', editor => {
     let selected = editor.getSelected();
-    if (selected.is(options.cellType) || selected.is(options.cellHeaderType)) {
+    if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
       let table = selected.parent().parent();
       let columnIndex = selected.collection.indexOf(selected);
 
@@ -99,7 +99,7 @@ export default (editor, options = {}) => {
 
   cmd.add('table-merge-cells-right', editor => {
     let selected = editor.getSelected();
-    if (selected.is(options.cellType) || selected.is(options.cellHeaderType)) {
+    if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
       let currentColspan = selected.getAttributes()['colspan'] ? selected.getAttributes()['colspan'] : 1;
       let columnIndex = selected.collection.indexOf(selected);
       let rowIndex = selected.parent().collection.indexOf(selected.parent());
@@ -124,7 +124,7 @@ export default (editor, options = {}) => {
 
   cmd.add('table-merge-cells-down', editor => {
     let selected = editor.getSelected();
-    if (selected.is(options.cellType)) {
+    if (selected.is(options.componentCell)) {
       let currentColspan = selected.getAttributes()['colspan'] ? selected.getAttributes()['colspan'] : 1;
       let currentRowspan = selected.getAttributes()['rowspan'] ? selected.getAttributes()['rowspan'] : 1;
       let columnIndex = selected.collection.indexOf(selected);
@@ -149,7 +149,7 @@ export default (editor, options = {}) => {
 
   cmd.add('table-unmerge-cells', editor => {
     let selected = editor.getSelected();
-    if (selected.is(options.cellType) || selected.is(options.cellHeaderType)) {
+    if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
       let currentColspan = selected.getAttributes()['colspan'] ? selected.getAttributes()['colspan'] : 1;
       let currentRowspan = selected.getAttributes()['rowspan'] ? selected.getAttributes()['rowspan'] : 1;
       let columnIndex = selected.collection.indexOf(selected);
@@ -164,7 +164,7 @@ export default (editor, options = {}) => {
           if (i === 0 && x === 0 && currentColspan > 1) {
             x = 1;
           }
-          table.components().at(rowIndex + i).components().add({ type: options.cellType }, { at: (i === 0 ? columnIndex + 1 : columnIndex) });
+          table.components().at(rowIndex + i).components().add({ type: options.componentCell }, { at: (i === 0 ? columnIndex + 1 : columnIndex) });
         }
       }
 
