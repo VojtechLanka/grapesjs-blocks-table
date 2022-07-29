@@ -1,10 +1,9 @@
 import CustomTable from './CustomTable';
 import TableCell from './TableCell';
 
-export default (editor, config = {}) => {
+export default (editor, options = {}) => {
   const domc = editor.DomComponents;
-  config.modal = editor.Modal;
 
-  CustomTable(domc, config);
-  TableCell(domc, config);
+  CustomTable(domc, options);
+  TableCell(domc, options);
 };

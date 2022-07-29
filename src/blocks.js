@@ -1,4 +1,4 @@
-export default (editor, opts = {}) => {
+export default (editor, options = {}) => {
   const bm = editor.BlockManager;
   
   bm.add('table-block', {

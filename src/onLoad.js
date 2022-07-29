@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import * as tblHelper from './tableHelper'
 
-export default (editor, opts = {}) => {
+export default (editor, options = {}) => {
 
   $(function() {
     let css =`
@@ -57,11 +57,11 @@ export default (editor, opts = {}) => {
       style.appendChild(document.createTextNode(css));
     }
 
-    $(opts.containerId ? opts.containerId : document).on('click','li.table-toolbar-submenu-run-command', function() {
+    $(options.containerId ? options.containerId : document).on('click','li.table-toolbar-submenu-run-command', function() {
       editor.runCommand(this.dataset.command);
     });
 
-    $(opts.containerId ? opts.containerId : document).on('click','input#table-button-create-new', function() {
+    $(options.containerId ? options.containerId : document).on('click','input#table-button-create-new', function() {
       tblHelper.updateAttributesAndCloseModal(this.dataset.componentId)
     });
   });

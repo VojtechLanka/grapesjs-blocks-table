@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import * as tblHelper from '../tableHelper'
 
-export default (comps, config) => {
-  const cellsResizable = config.cellsResizable;
+export default (comps, options) => {
+  const cellsResizable = options.cellsResizable;
 
   comps.addType(tblHelper.cellType, {
     isComponent: el => el.tagName === 'TD',

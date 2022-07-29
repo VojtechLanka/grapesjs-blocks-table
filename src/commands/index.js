@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import * as tblHelper from '../tableHelper'
 
-export default (editor, opts = {}) => {
+export default (editor, options = {}) => {
   const cmd = editor.Commands;
 
   cmd.add('table-show-columns-operations', () => {
