@@ -3,19 +3,20 @@ import components from './components';
 import blocks from './blocks';
 import commands from './commands';
 
-export default (editor, opts = {}) => {
-  const options = {
-    ...{
-      tblResizable: true,
-      cellsResizable: true,
-      traitsPanelId: '#open-tm'
-    },
-    ...opts,
+export default (editor, options = {}) => {
+  const optionsDefault = {
+    tblResizable: true,
+    cellsResizable: true,
+    }
+
+  const optionsUpdated = {
+    ...optionsDefault,
+    ...options,
   };
 
-  onLoad(editor, options);
-  components(editor, options)
-  blocks(editor, options)
-  commands(editor, options)
+  onLoad(editor, optionsUpdated);
+  components(editor, optionsUpdated)
+  blocks(editor, optionsUpdated)
+  commands(editor, optionsUpdated)
 };
 
