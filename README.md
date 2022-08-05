@@ -11,7 +11,7 @@ Plugin for GrapesJS that adds table block.
 |`cellsResizable`|Should cells within the table have resize handles|`true`|
 |`componentCell`|Id of component that should be used for cells|`customCell`|
 |`componentCellHeader`|Id of component that should be used for header cells|`customHeaderCell`|
-|`componentRow`|Id of component that should be used for header rows|`row`|
+|`componentRow`|Id of component that should be used for header rows|`customRow`|
 
 ## Usage
 
