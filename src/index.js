@@ -9,7 +9,7 @@ export default (editor, options = {}) => {
     cellsResizable: true,
     componentCell: 'customCell',
     componentCellHeader: 'customHeaderCell',
-    componentRow: 'row'
+    componentRow: 'customRow'
     }
 
   const optionsUpdated = {

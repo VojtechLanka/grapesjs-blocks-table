@@ -10,7 +10,7 @@ export default (domComponents, options) => {
         nColumns: 3,
         hasHeaders: false,
         tagName: 'table',
-        droppable: true,
+        droppable: options.componentRow,
         resizable: tblResizable,
         traits: [
           {
