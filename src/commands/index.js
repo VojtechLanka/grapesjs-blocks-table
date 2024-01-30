@@ -5,11 +5,11 @@ export default (editor, options = {}) => {
   const commands = editor.Commands;
 
   commands.add('table-show-columns-operations', () => {
-    tblHelper.updateTableToolbarSubmenu('columns', 'rows', options.componentCell, options.componentCellHeader);
+    tblHelper.updateTableToolbarSubmenu(editor, 'columns', 'rows', options.componentCell, options.componentCellHeader);
   });
 
   commands.add('table-show-rows-operations', () => {
-    tblHelper.updateTableToolbarSubmenu('rows', 'columns', options.componentCell, options.componentCellHeader);
+    tblHelper.updateTableToolbarSubmenu(editor, 'rows', 'columns', options.componentCell, options.componentCellHeader);
   });
 
   commands.add('table-toggle-header', ()=> {
@@ -31,7 +31,7 @@ export default (editor, options = {}) => {
       let rowComponent = selected.parent();
       let table = selected.parent().parent();
       tblHelper.insertRow(table, rowComponent.collection.indexOf(rowComponent), options.componentRow, options.componentCell, true)
-      tblHelper.refreshEditorSelected()
+      tblHelper.refreshEditorSelected(editor)
     }
   });
 
@@ -41,7 +41,7 @@ export default (editor, options = {}) => {
       let rowComponent = selected.parent();
       let table = selected.parent().parent();
       tblHelper.insertRow(table, rowComponent.collection.indexOf(rowComponent) + 1, options.componentRow, options.componentCell, true)
-      tblHelper.refreshEditorSelected()
+      tblHelper.refreshEditorSelected(editor)
     }
   });
 
@@ -51,7 +51,7 @@ export default (editor, options = {}) => {
       let table = selected.parent().parent();
       let columnIndex = selected.collection.indexOf(selected);
       tblHelper.insertColumn(table, columnIndex, options.componentCell, options.componentCellHeader, true)
-      tblHelper.refreshEditorSelected()
+      tblHelper.refreshEditorSelected(editor)
     }
   });
 
@@ -62,7 +62,7 @@ export default (editor, options = {}) => {
       let columnIndex = selected.collection.indexOf(selected);
 
       tblHelper.insertColumn(table, columnIndex + 1, options.componentCell, options.componentCellHeader, true)
-      tblHelper.refreshEditorSelected()
+      tblHelper.refreshEditorSelected(editor)
     }
   });
 
@@ -115,7 +115,7 @@ export default (editor, options = {}) => {
       }
 
       selected.addAttributes({ 'colspan': ++currentColspan });
-      tblHelper.refreshEditorSelected()
+      tblHelper.refreshEditorSelected(editor)
       if (columnIndex + 1 == selected.parent().components().length) {
         $('#button-merge-cells-right').hide();
       }
@@ -140,7 +140,7 @@ export default (editor, options = {}) => {
       }
 
       selected.addAttributes({ 'rowspan': ++currentRowspan });
-      tblHelper.refreshEditorSelected()
+      tblHelper.refreshEditorSelected(editor)
       if (rowIndex + 2 == table.components().length) {
         $('#button-merge-cells-down').hide();
       }
@@ -171,7 +171,7 @@ export default (editor, options = {}) => {
       selected.setAttributes({ 'colspan': 1 });
       selected.setAttributes({ 'rowspan': 1 });
 
-      tblHelper.refreshEditorSelected()
+      tblHelper.refreshEditorSelected(editor)
       $('#button-merge-cells-down').show();
       $('#button-merge-cells-right').show();
     }

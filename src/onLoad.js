@@ -64,7 +64,7 @@ export default (editor, options = {}) => {
     });
 
     $(options.containerId ? options.containerId : document).on('click','input#table-button-create-new', function() {
-      tblHelper.updateAttributesAndCloseModal(this.dataset.componentId)
+      tblHelper.updateAttributesAndCloseModal(editor, this.dataset.componentId)
     });
   });
 
@@ -76,7 +76,7 @@ export default (editor, options = {}) => {
 
   editor.on('component:selected', component => {
     if (component.get('type') == options.componentCell || component.get('type') == options.componentCellHeader) {
-      component.set('toolbar', tblHelper.getCellToolbar());
+      component.set('toolbar', tblHelper.getCellToolbar(editor));
     }
 
     if(component.get('type') == 'customTable'){

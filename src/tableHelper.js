@@ -1,4 +1,4 @@
-export const getCellToolbar = () => {
+export const getCellToolbar = (editor) => {
   let toolbar = [
     { attributes: { class: 'column-actions columns-operations', title: 'Columns operations' }, command: 'table-show-columns-operations' },
     { attributes: { class: 'row-actions rows-operations', title: 'Rows operations' }, command: 'table-show-rows-operations' },
@@ -112,7 +112,7 @@ export function clearCellsWithSize(table) {
   });
 }
 
-export function updateAttributesAndCloseModal (componentId) {
+export function updateAttributesAndCloseModal (editor, componentId) {
   let nRows = document.getElementById('nRows').value;
   let nColumns = document.getElementById('nColumns').value;
 
@@ -128,7 +128,7 @@ export function updateAttributesAndCloseModal (componentId) {
   editor.Modal.close();
 }
 
-export function updateTableToolbarSubmenu (submenuToShow, submenuToHide, componentCell, componentCellHeader) {
+export function updateTableToolbarSubmenu (editor, submenuToShow, submenuToHide, componentCell, componentCellHeader) {
   let selected = editor.getSelected();
   let currentMenu = $('ul#toolbar-submenu-'+submenuToShow);
   if(currentMenu.length > 0){
@@ -178,7 +178,7 @@ export function updateTableToolbarSubmenu (submenuToShow, submenuToHide, compone
   }
 }
 
-export function refreshEditorSelected() {
+export function refreshEditorSelected(editor) {
   let selected = editor.getSelected();
   editor.selectRemove(selected);
   setTimeout(function() { editor.select(selected); }, 50);
