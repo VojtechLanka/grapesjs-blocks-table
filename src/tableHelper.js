@@ -2,6 +2,8 @@ export const getCellToolbar = (editor) => {
   let toolbar = [
     { attributes: { class: 'column-actions columns-operations', title: 'Columns operations' }, command: 'table-show-columns-operations' },
     { attributes: { class: 'row-actions rows-operations', title: 'Rows operations' }, command: 'table-show-rows-operations' },
+    { attributes: { class: 'fa fa-level-up', title: 'Move row up' }, command: 'table-row-move-up' },
+    { attributes: { class: 'fa fa-level-down', title: 'Move row dow' }, command: 'table-row-move-down' },
     { attributes: { class: 'fa fa-arrow-up', title: 'Select parent component' }, command: 'table-select' }
   ]
   if (editor.getSelected().getAttributes()['colspan'] > 1 || editor.getSelected().getAttributes()['rowspan'] > 1) {
@@ -188,4 +190,19 @@ export function getAllComponents (model, result = []) {
   result.push(model);
   model.components().each(mod => getAllComponents(mod, result))
   return result;
+}
+
+export function rowMove(row, position) {
+  const table = row.parent();
+  const items = table.components();
+  const index = items.indexOf(row);
+  if (index === -1) {
+    return
+  }
+  const indexNew = index + position
+  if (indexNew > -1 && indexNew < items.length) {
+    const rowCopy = items.at(index);
+    items.remove(row);
+    items.add(rowCopy, { at: indexNew });
+  }
 }

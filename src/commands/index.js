@@ -211,4 +211,20 @@ export default (editor, options = {}) => {
       editor.Modal.close();
     },
   });
+
+  commands.add('table-row-move-up', () => {
+    let selected = editor.getSelected();
+    if (selected.is(options.componentCell)) {
+      tblHelper.rowMove(selected.parent(), -1);
+      tblHelper.refreshEditorSelected(editor)
+    }
+  });
+
+  commands.add('table-row-move-down', () => {
+    let selected = editor.getSelected();
+    if (selected.is(options.componentCell)) {
+      tblHelper.rowMove(selected.parent(), 1);
+      tblHelper.refreshEditorSelected(editor)
+    }
+  });
 };
