@@ -5,7 +5,7 @@
   "main": "dist/grapesjs-blocks-table.min.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/VojtechLanka/grapesjs-blocks-table.git"
+    "url": "git+https://github.com/VojtechLanka/grapesjs-blocks-table.git"
   },
   "scripts": {
     "start": "grapesjs-cli serve",
