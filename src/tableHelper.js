@@ -36,12 +36,14 @@ export function insertColumn(tableComponent, addAtIndex, componentCell, componen
 }
 
 export function insertRow(tableComponent, addAtIndex, componentRow, componentCell, updateProps = false){
-  tableComponent.components().add({
-    type: componentRow,
-    components: [...Array(tableComponent.components().at(0).components().length).keys()].map(() => ({ type: componentCell }))
-  }, {
-    at: addAtIndex
+  const components = []
+  tableComponent.components().at(0).components().models.forEach(model => {
+    const colspan = model.getAttributes()['colspan'] ? model.getAttributes()['colspan'] : 1
+    for (let i = 0; i < colspan; i++) {
+      components.push({ type: componentCell })
+    }
   });
+  tableComponent.components().add({ type: componentRow, components: components }, { at: addAtIndex });
 
   if(updateProps){
     tableComponent.set({nRows: Number(tableComponent.props().nRows) + 1})
