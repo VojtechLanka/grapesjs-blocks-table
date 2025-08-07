@@ -12,13 +12,16 @@ Plugin for GrapesJS that adds table block.
 |`componentCell`|Id of component that should be used for cells|`customCell`|
 |`componentCellHeader`|Id of component that should be used for header cells|`customHeaderCell`|
 |`componentRow`|Id of component that should be used for header rows|`customRow`|
-
+## From CDN
+```html
+<script src="https://cdn.jsdelivr.net/gh/VojtechLanka/grapesjs-blocks-table@master/dist/grapesjs-blocks-table.min.js"></script>
+```
 ## Usage
 
 ```html
 <link rel="stylesheet" href="path/to/grapes.min.css">
 <script src="path/to/grapes.min.js"></script>
-<script src="path/to/grapesjs-blocks-table.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/VojtechLanka/grapesjs-blocks-table@master/dist/grapesjs-blocks-table.min.js"></script>
 
 <div id="gjs"></div>
 
