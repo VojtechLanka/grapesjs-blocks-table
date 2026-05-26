@@ -52,7 +52,7 @@ export function insertRow(tableComponent, addAtIndex, componentRow, componentCel
 
 export function removeColumn(tableComponent, removeAtIndex, updateProps = false) {
   tableComponent.components().forEach(component => {
-    component.components().at(removeAtIndex).remove();
+    component.components().at(removeAtIndex)?.remove();
   });
   if(updateProps){
     tableComponent.set({nColumns: Number(tableComponent.props().nColumns) - 1})
@@ -60,7 +60,7 @@ export function removeColumn(tableComponent, removeAtIndex, updateProps = false)
 }
 
 export function removeRow(tableComponent, removeAtIndex, updateProps = false) {
-  tableComponent.components().at(removeAtIndex).remove()
+  tableComponent.components().at(removeAtIndex)?.remove()
   if(updateProps){
     tableComponent.set({nRows: Number(tableComponent.props().nRows) - 1})
   }

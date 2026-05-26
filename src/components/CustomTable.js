@@ -122,12 +122,13 @@ export default (domComponents, options) => {
       },
       rowCount(){
         let rowCount = this.components().length
-        if(this.components().at(0).components().at(0).is(options.componentCellHeader))
+        if (rowCount > 0 && this.components().at(0).components().at(0)?.is(options.componentCellHeader)) {
           rowCount--
+        }
         return rowCount
       },
       columnCount(){
-        return this.components().at(0).components().length
+        return this.components().at(0)?.components().length ?? 0
       },
       getLastRowIndex(){
         return this.rowCount() - 1
