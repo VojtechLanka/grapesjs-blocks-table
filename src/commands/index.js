@@ -100,11 +100,11 @@ export default (editor, options = {}) => {
   commands.add('table-merge-cells-right', editor => {
     let selected = editor.getSelected();
     if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
-      let currentColspan = selected.getAttributes()['colspan'] ? selected.getAttributes()['colspan'] : 1;
+      let currentColspan = selected.getAttributes()['colspan'] ? parseInt(selected.getAttributes()['colspan']) : 1;
       let columnIndex = selected.collection.indexOf(selected);
       let rowIndex = selected.parent().collection.indexOf(selected.parent());
       let table = selected.parent().parent();
-      let mergedRowsIndexEnd = selected.getAttributes()['rowspan'] > 0 ? selected.getAttributes()['rowspan'] : 1;
+      let mergedRowsIndexEnd = selected.getAttributes()['rowspan'] > 0 ? parseInt(selected.getAttributes()['rowspan']) : 1;
 
       for (let index = 0; index < mergedRowsIndexEnd; index++) {
         let componentToRemove = table.components().at(rowIndex + index).components().at(index === 0 ? columnIndex + 1 : columnIndex )
@@ -125,8 +125,8 @@ export default (editor, options = {}) => {
   commands.add('table-merge-cells-down', editor => {
     let selected = editor.getSelected();
     if (selected.is(options.componentCell)) {
-      let currentColspan = selected.getAttributes()['colspan'] ? selected.getAttributes()['colspan'] : 1;
-      let currentRowspan = selected.getAttributes()['rowspan'] ? selected.getAttributes()['rowspan'] : 1;
+      let currentColspan = selected.getAttributes()['colspan'] ? parseInt(selected.getAttributes()['colspan']) : 1;
+      let currentRowspan = selected.getAttributes()['rowspan'] ? parseInt(selected.getAttributes()['rowspan']) : 1;
       let columnIndex = selected.collection.indexOf(selected);
       let rowIndex = selected.parent().collection.indexOf(selected.parent()) + currentRowspan - 1;
       let table = selected.parent().parent();
@@ -150,8 +150,8 @@ export default (editor, options = {}) => {
   commands.add('table-unmerge-cells', editor => {
     let selected = editor.getSelected();
     if (selected.is(options.componentCell) || selected.is(options.componentCellHeader)) {
-      let currentColspan = selected.getAttributes()['colspan'] ? selected.getAttributes()['colspan'] : 1;
-      let currentRowspan = selected.getAttributes()['rowspan'] ? selected.getAttributes()['rowspan'] : 1;
+      let currentColspan = selected.getAttributes()['colspan'] ? parseInt(selected.getAttributes()['colspan']) : 1;
+      let currentRowspan = selected.getAttributes()['rowspan'] ? parseInt(selected.getAttributes()['rowspan']) : 1;
       let columnIndex = selected.collection.indexOf(selected);
       let rowIndex = selected.parent().collection.indexOf(selected.parent());
       let table = selected.parent().parent();

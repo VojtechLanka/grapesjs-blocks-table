@@ -185,7 +185,7 @@ export function updateTableToolbarSubmenu (editor, submenuToShow, submenuToHide,
           </ul>
           `;
         } else {
-          let rowspan = selected.getAttributes()['rowspan'] ? selected.getAttributes()['rowspan'] : 0;
+          let rowspan = selected.getAttributes()['rowspan'] ? parseInt(selected.getAttributes()['rowspan']) : 0;
 
           htmlString = `
           <ul id="toolbar-submenu-columns" class="toolbar-submenu ` + ($('.gjs-toolbar').position().left > 150 ? 'toolbar-submenu-right' : '') + `" style="display: none;">
